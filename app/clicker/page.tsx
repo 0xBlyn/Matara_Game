@@ -57,7 +57,7 @@ function ClickerPage() {
                     setCurrentView={setCurrentView}
                 />;
         }
-    }, [currentView, isInitialized]);
+    }, [currentView, isInitialized, setCurrentView, setIsInitialized]);
 
     console.log('ClickerPage rendering. Current state:', { currentView, isInitialized });
 
