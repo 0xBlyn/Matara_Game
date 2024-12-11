@@ -30,7 +30,7 @@ export default function Airdrop() {
                                 <Image src={iceToken} alt="Ice Token" width={96} height={96} className="rounded-lg mr-2" />
                             </div>
                             <h1 className="text-2xl text-center mb-4">Airdrop Tasks</h1>
-                            <p className="text-gray-300 text-center mb-4 font-normal">Get ready for upcoming tasks! Soon, you'll see a list of challenges below. Complete them to qualify for the Airdrop.</p>
+                            <p className="text-gray-300 text-center mb-4 font-normal">Get ready for upcoming tasks! Soon, you&aposll see a list of challenges below. Complete them to qualify for the Airdrop.</p>
                             <h2 className="text-base mt-8 mb-4">Tasks list</h2>
                             <div
                                 className="flex justify-between items-center bg-[#319ee0] rounded-lg p-4 cursor-pointer"
