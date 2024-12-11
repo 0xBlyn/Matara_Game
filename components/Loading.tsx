@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { mainCharacter } from '@/images';
@@ -99,7 +97,10 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
         energyLimitLevelIndex: userData.energyLimitLevelIndex,
         lastEnergyRefillTimestamp: userData.lastEnergyRefillsTimestamp,
         mineLevelIndex: userData.mineLevelIndex,
-        profitPerHour: calculateProfitPerHour(userData.mineLevelIndex)
+        profitPerHour: calculateProfitPerHour(userData.mineLevelIndex),
+        isMiningActive: false,
+        miningStartTime: 0,
+        totalMined: 0
       };
 
       initializeState(initialState);
