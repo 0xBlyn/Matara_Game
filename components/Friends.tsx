@@ -5,6 +5,9 @@ import { useGameStore } from '@/utils/game-mechaincs';
 import { Copy, ChevronDown } from 'lucide-react';
 import { showErrorMessage, showSuccessMessage } from '@/utils/ui';
 import { motion, AnimatePresence } from 'framer-motion';
+import copyicon from '@/images/Group.png'
+import gradeffect from '@/images/Group 103 (1).png'
+import Image from 'next/image';
 
 interface Referral {
   username: string;
@@ -55,25 +58,22 @@ export default function Friends() {
 
   return (
     <div className="min-h-screen bg-black text-white p-4">
-      <div className="max-w-md mx-auto">
-        <h1 className="text-4xl font-black text-center mb-8 bg-gradient-to-r from-[#FFB939] to-[#FFD683] text-transparent bg-clip-text font-['Impact']">
-          Referrals
-        </h1>
-
+      <div className="max-w-md mx-auto flex items-center flex-col">
+      <h1 className='heading mb-6'>Referrals</h1>
         <div className="space-y-4">
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full py-3 px-4 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl font-bold text-lg flex items-center justify-center gap-2 border border-emerald-400/20"
+            className="balance pages font-['Gill_Sans',sans-serif] text-lg"
             onClick={handleCopyInviteLink}
           >
-            Invite Friends <Copy className="w-5 h-5" />
+            Invite Friends <span className="ml-2"><Image src={copyicon} width={20} height={20} alt="Copy icon" /></span>
           </motion.button>
 
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full py-3 px-4 bg-gradient-to-r from-[#FFB939] to-[#FFD683] rounded-xl font-bold text-lg text-black"
+            className="relative inline-flex items-center justify-center px-5 py-3 min-w-[60%] text-black text-lg font-extrabold font-['Gill_Sans'] leading-[18px] rounded-lg before:absolute before:inset-0 before:rounded-lg before:p-[3px] before:bg-gradient-to-r before:from-[#FFD683] before:to-[#FFB948] before:-z-10 after:absolute after:inset-[3px] after:rounded-[5px] after:bg-gradient-to-r after:from-[#FFB939] after:to-[#FFD683] after:-z-10 shadow-[0px_0px_40px_0px_#FFC36940] hover:opacity-90 transition-opacity my-3"
             onClick={handleShareStory}
           >
             Share Story
@@ -84,8 +84,8 @@ export default function Friends() {
           </p>
         </div>
 
-        <div className="mt-8">
-          <div className="flex justify-between text-sm text-gray-400 mb-2 px-2">
+        <div className="mt-8 w-full">
+          <div className="flex justify-between text-sm text-white mb-2 px-2">
             <span>User Name</span>
             <span>Earnings</span>
           </div>

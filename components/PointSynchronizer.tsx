@@ -5,47 +5,53 @@ import { useEffect, useCallback, useRef } from 'react';
 import { useGameStore } from '@/utils/game-mechaincs';
 import { showErrorMessage, showSuccessMessage } from '@/utils/ui';
 
+const SYNC_DELAY = 2000; // 2 seconds
+const MIN_POINTS_TO_SYNC = 1;
+
+interface SyncPayload {
+    initData: string;
+    unsynchronizedPoints: number;
+    currentEnergy: number;
+}
+
 export function PointSynchronizer() {
     const {
         userTelegramInitData,
         energy,
         unsynchronizedPoints,
-        lastClickTimestamp,
-        initializeState
+        lastClickTimestamp
     } = useGameStore();
 
     const syncTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const syncWithServer = useCallback(async () => {
-        if (unsynchronizedPoints < 1) return;
-        const frozenPointsToSynchronized = unsynchronizedPoints;
-        showSuccessMessage(`Trying to synchronize ${frozenPointsToSynchronized}`);
+        if (unsynchronizedPoints < MIN_POINTS_TO_SYNC) return;
+        
+        const frozenPointsToSynchronize = unsynchronizedPoints;
+        showSuccessMessage(`Synchronizing ${frozenPointsToSynchronize} points...`);
 
         try {
+            const payload: SyncPayload = {
+                initData: userTelegramInitData,
+                unsynchronizedPoints,
+                currentEnergy: energy
+            };
+
             const response = await fetch('/api/sync', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    initData: userTelegramInitData,
-                    unsynchronizedPoints: unsynchronizedPoints,
-                    currentEnergy: energy,
-                }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             });
 
             if (!response.ok) {
-                throw new Error('Failed to sync with server');
+                throw new Error('Sync failed');
             }
 
-            const data = await response.json();
-            console.log("Data from server: ", data);
-            const updatedUnsynchronizedPoints = Math.max(0, unsynchronizedPoints - frozenPointsToSynchronized);
-
-            showSuccessMessage(`Successfully synchronized! New points to synchronize: ${updatedUnsynchronizedPoints}`);
+            const updatedUnsynchronizedPoints = Math.max(0, unsynchronizedPoints - frozenPointsToSynchronize);
+            showSuccessMessage(`Synchronized! Remaining points: ${updatedUnsynchronizedPoints}`);
         } catch (error) {
-            showErrorMessage('Error syncing with server:');
-            console.error('Error syncing with server:', error);
+            showErrorMessage('Failed to sync with server');
+            console.error('Sync error:', error);
         }
     }, [userTelegramInitData, unsynchronizedPoints, energy]);
 
@@ -54,12 +60,9 @@ export function PointSynchronizer() {
             clearTimeout(syncTimeoutRef.current);
         }
 
-        console.log("unsynchronizedPoints", unsynchronizedPoints);
-        syncTimeoutRef.current = setTimeout(() => {
-            if (unsynchronizedPoints > 1) {
-                syncWithServer();
-            }
-        }, 2000);
+        if (unsynchronizedPoints > MIN_POINTS_TO_SYNC) {
+            syncTimeoutRef.current = setTimeout(syncWithServer, SYNC_DELAY);
+        }
 
         return () => {
             if (syncTimeoutRef.current) {

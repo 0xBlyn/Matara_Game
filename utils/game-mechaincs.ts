@@ -40,6 +40,9 @@ export interface InitialGameState {
   lastEnergyRefillTimestamp: number;
   mineLevelIndex: number;
   profitPerHour: number;
+  isMiningActive: boolean;
+  miningStartTime: number;
+  totalMined: number;
 }
 
 export interface GameState extends InitialGameState {
@@ -62,6 +65,8 @@ export interface GameState extends InitialGameState {
   resetDailyRefills: () => void
   setMineLevelIndex: (mineLevelIndex: number) => void
   upgradeMineLevelIndex: () => void
+  setMiningActive: (active: boolean) => void;
+  setMiningStartTime: (time: number) => void;
 }
 
 export const calculateLevel = (points: number): number => {
@@ -201,6 +206,8 @@ export const createGameStore = (initialState: InitialGameState) => create<GameSt
     }
     return state;
   }),
+  setMiningActive: (active) => set({ isMiningActive: active }),
+  setMiningStartTime: (time) => set({ miningStartTime: time }),
 }));
 
 export const useGameStore = createGameStore({
@@ -220,4 +227,7 @@ export const useGameStore = createGameStore({
   lastEnergyRefillTimestamp: Date.now(),
   mineLevelIndex: 0,
   profitPerHour: 0,
+  isMiningActive: false,
+  miningStartTime: 0,
+  totalMined: 0,
 });

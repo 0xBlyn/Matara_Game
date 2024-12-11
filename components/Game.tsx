@@ -1,22 +1,11 @@
-'use client'
-
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import Hamster from '@/icons/Hamster';
-import Info from '@/icons/Info';
-import Settings from '@/icons/Settings';
-import { binanceLogo, dailyCipher, dailyCombo, dailyReward, dollarCoin, lightning, mainCharacter } from '@/images';
-import IceCube from '@/icons/IceCube';
+import { useGameStore, levelNames, levelMinPoints } from '@/utils/game-mechaincs';
+import activeArrow from '@/images/active.png';
+import inactiveArrow from '@/images/inactive.png';
+import hourglass from '@/images/Group 111 (1).png';
 import IceCubes from '@/icons/IceCubes';
-import GasStation from '@/icons/GasStation';
-import Rocket from '@/icons/Rocket';
-import Energy from '@/icons/Energy';
-import Link from 'next/link';
-import { levelMinPoints, levelNames, useGameStore } from '@/utils/game-mechaincs';
-import Snowflake from '@/icons/Snowflake';
-import TopInfoSection from '@/components/TopInfoSection';
-import { AutoIncrement } from './AutoIncrement';
-import { PointSynchronizer } from './PointSynchronizer';
+import lion from '@/images/Group 113 (1).png'; // Example import for lion image
 
 interface GameProps {
   currentView: string;
@@ -24,6 +13,44 @@ interface GameProps {
 }
 
 export default function Game({ currentView, setCurrentView }: GameProps) {
+  const [clicks, setClicks] = useState<{ id: number, x: number, y: number }[]>([]);
+
+  const {
+    points,
+    pointsBalance,
+    pointsPerClick,
+    energy,
+    maxEnergy,
+    gameLevelIndex,
+    clickTriggered,
+    updateLastClickTimestamp,
+    isMiningActive,
+    miningStartTime,
+    setMiningActive,
+    setMiningStartTime,
+    totalMined,
+  } = useGameStore();
+
+  const [timeLeft, setTimeLeft] = useState('');
+  const [isMiningEnabled, setIsMiningEnabled] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const earningsPerSecond = 0.018;
+
+  // Mining Timer Effect
+  useEffect(() => {
+    if (isMiningActive) {
+      const interval = setInterval(() => {
+        const currentTime = Date.now();
+        const timeElapsed = currentTime - miningStartTime;
+        const timeRemaining = 24 * 60 * 60 * 1000 - timeElapsed;
+        const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        setTimeLeft(`${hours}hrs ${minutes}mins`);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isMiningActive, miningStartTime]);
 
   const handleViewChange = (view: string) => {
     console.log('Attempting to change view to:', view);
@@ -37,38 +64,6 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
     } else {
       console.error('setCurrentView is not a function:', setCurrentView);
     }
-  };
-
-  const [clicks, setClicks] = useState<{ id: number, x: number, y: number }[]>([]);
-
-  const {
-    points,
-    pointsBalance,
-    pointsPerClick,
-    energy,
-    maxEnergy,
-    gameLevelIndex,
-    clickTriggered,
-    updateLastClickTimestamp,
-  } = useGameStore();
-
-  const calculateTimeLeft = (targetHour: number) => {
-    const now = new Date();
-    const target = new Date(now);
-    target.setUTCHours(targetHour, 0, 0, 0);
-
-    if (now.getUTCHours() >= targetHour) {
-      target.setUTCDate(target.getUTCDate() + 1);
-    }
-
-    const diff = target.getTime() - now.getTime();
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-    const paddedHours = hours.toString().padStart(2, '0');
-    const paddedMinutes = minutes.toString().padStart(2, '0');
-
-    return `${paddedHours}:${paddedMinutes}`;
   };
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -89,6 +84,27 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
     setClicks((prevClicks) => prevClicks.filter(click => click.id !== id));
   };
 
+  const handleStartMining = () => {
+    if (!isMiningActive) {
+      setMiningActive(true);
+      setMiningStartTime(Date.now());
+      setIsMiningEnabled(true);
+    }
+  };
+
+  const handleStopMining = () => {
+    setMiningActive(false);
+    setIsMiningEnabled(false);
+  };
+
+  const handleButtonClick = () => {
+    if (isMiningActive) {
+      setShowPopup(true);
+    } else {
+      handleStartMining();
+    }
+  };
+
   const calculateProgress = () => {
     if (gameLevelIndex >= levelNames.length - 1) {
       return 100;
@@ -100,62 +116,64 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   };
 
   return (
-    <div className="bg-black flex justify-center">
-      <div className="w-full bg-black text-white h-screen font-bold flex flex-col max-w-xl">
-        <TopInfoSection />
+    <div className="fixed top-20 max-h-[80vh] text-white flex flex-col items-center w-full">
+      <div className="flex items-center justify-center w-full px-[10%] lg:max-w-[300px]">
+        {/* Mining Mode Section */}
+        <div className="text-2xl font-bold text-right mt-7">
+          <p className='text-[#4BF693] text-xs font-semibold'>Mining Mode</p>
+          <p
+            className="font-black leading-none text-2xl text-transparent bg-clip-text"
+            style={{
+              backgroundImage: 'linear-gradient(92.78deg, #44F58E 12.41%, #FAFAFA 81.56%)',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text'
+            }}
+          >
+            {totalMined.toFixed(3)} <span className='text-semibold'>$</span>MAT
+          </p>
+        </div>
 
-        <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
-          <div className="absolute top-[2px] left-0 right-0 bottom-0 bg-[#1d2025] rounded-t-[46px]">
-
-            <div className="px-4 mt-4 flex justify-center">
-              <div className="px-4 py-2 flex items-center space-x-2">
-                <IceCubes className="w-12 h-12 mx-auto" />
-                <p className="text-4xl text-white" suppressHydrationWarning >{pointsBalance.toLocaleString()}</p>
-              </div>
-            </div>
-
-            <div className="flex justify-center gap-2">
-              <p>{levelNames[gameLevelIndex]}</p>
-              <p className="text-[#95908a]" >&#8226;</p>
-              <p>{gameLevelIndex + 1} <span className="text-[#95908a]">/ {levelNames.length}</span></p>
-            </div>
-
-            <div className="px-4 mt-4 flex justify-center">
-              <div
-                className="w-80 h-80 p-4 rounded-full circle-outer"
-                onClick={handleCardClick}
-              >
-                <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
-                  <Image
-                    src={mainCharacter}
-                    alt="Main Character"
-                    fill
-                    style={{
-                      objectFit: 'cover',
-                      objectPosition: 'center',
-                      transform: 'scale(1.05) translateY(10%)'
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-between px-4 mt-4">
-              <p className="flex justify-center items-center gap-1"><Image src={lightning} alt="Exchange" width={40} height={40} /><span className="flex flex-col"><span className="text-xl font-bold">{energy}</span><span className="text-base font-medium">/ {maxEnergy}</span></span></p>
-              <button onClick={() => handleViewChange("boost")} className="flex justify-center items-center gap-1"><Rocket size={40} /><span className="text-xl">Boost</span></button>
-            </div>
-
-            <div className="w-full px-4 text-sm mt-2">
-              <div className="flex items-center mt-1 border-2 border-[#43433b] rounded-full">
-                <div className="w-full h-3 bg-[#43433b]/[0.6] rounded-full">
-                  <div className="progress-gradient h-3 rounded-full" style={{ width: `${calculateProgress()}%` }}></div>
-                </div>
-              </div>
-            </div>
-
+        {/* Hourglass with Mining Status Arrow */}
+        <div className="relative flex items-center justify-center w-full lg:mx-0 -mx-[8%]">
+          <div className="relative justify-center">
+            <Image className='sm:w-[120px]' src={hourglass} alt="Hourglass" width={80} height={80} />
+            <Image
+              src={isMiningActive ? activeArrow : inactiveArrow}
+              alt="Mining Status Arrow"
+              width={40}
+              height={40}
+              className="absolute sm:w-[60px] top-0 mt-6 left-0 transform translate-x-1/2 translate-y-1/2 z-10"
+            />
           </div>
+        </div>
+
+        {/* Earning Rate Section */}
+        <div className="text-xl mt-7">
+          <p className='text-[#FFBF49] text-xs font-semibold'>Earning Rate</p>
+          <p className='font-semibold text-2xl leading-none'>{earningsPerSecond.toFixed(4)} <span className='text-lg leading-none font-base'>$MAT/Sec</span></p>
         </div>
       </div>
 
+      {/* Mining Reset Timer */}
+      <p className="mb-3 sm:py-1 pt-1 z-[9999] -mt-2 text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #FFD683 0%, #FFB948 100%)' }}>
+        Mining Resets in <span style={{ color: '#fff' }}>{timeLeft}</span>
+      </p>
+
+      {/* Claim Button */}
+      <button
+        onClick={handleButtonClick}
+        className="button lg:max-w-[200px] lg:-mt-0"
+        disabled={isMiningActive}
+      >
+        {isMiningActive ? 'Mining in Progress' : 'Claim Daily Matara'}
+      </button>
+
+      {/* Lion Image at Bottom */}
+      <div className='fixed bottom-0'>
+        <Image className='min-w-[100vw] flex  bottom-0 lg:max-w-[300px]' src={lion} alt="Main Character" width={100} height={100} />
+      </div>
+
+      {/* Click Effects */}
       {clicks.map((click) => (
         <div
           key={click.id}
@@ -167,9 +185,9 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
           }}
           onAnimationEnd={() => handleAnimationEnd(click.id)}
         >
-          {pointsPerClick}<IceCube className="w-12 h-12 mx-auto" />
+          {pointsPerClick}<IceCubes className="w-12 h-12 mx-auto" />
         </div>
       ))}
     </div>
-  )
+  );
 }

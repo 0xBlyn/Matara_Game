@@ -4,41 +4,56 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useGameStore } from '@/utils/game-mechaincs';
 
+interface AutoIncrementState {
+    profitPerHour: number;
+    pointsPerClick: number;
+    lastClickTimestamp: number | null;
+}
+
 export function AutoIncrement() {
-  const {
-    lastClickTimestamp,
-    profitPerHour,
-    pointsPerClick,
-    energy,
-    maxEnergy,
-    incrementPoints,
-    incrementEnergy
-  } = useGameStore();
+    const {
+        lastClickTimestamp,
+        profitPerHour,
+        pointsPerClick,
+        incrementPoints,
+        incrementEnergy
+    } = useGameStore();
 
-  // Use a ref to store the latest values without causing re-renders
-  const stateRef = useRef({ profitPerHour, pointsPerClick, lastClickTimestamp });
+    const stateRef = useRef<AutoIncrementState>({
+        profitPerHour,
+        pointsPerClick,
+        lastClickTimestamp
+    });
 
-  // Update the ref when these values change
-  useEffect(() => {
-    stateRef.current = { profitPerHour, pointsPerClick, lastClickTimestamp };
-  }, [profitPerHour, pointsPerClick, lastClickTimestamp]);
+    useEffect(() => {
+        stateRef.current = {
+            profitPerHour,
+            pointsPerClick,
+            lastClickTimestamp
+        };
+    }, [profitPerHour, pointsPerClick, lastClickTimestamp]);
 
-  const autoIncrement = useCallback(() => {
-    const { profitPerHour, pointsPerClick, lastClickTimestamp } = stateRef.current;
-    const pointsPerSecond = profitPerHour / 3600;
-    const currentTime = Date.now();
+    const autoIncrement = useCallback(() => {
+        const { profitPerHour, pointsPerClick, lastClickTimestamp } = stateRef.current;
+        const pointsPerSecond = profitPerHour / 3600;
+        const currentTime = Date.now();
+        const ENERGY_COOLDOWN = 2000; // 2 seconds cooldown
 
-    incrementPoints(pointsPerSecond);
+        incrementPoints(pointsPerSecond);
 
-    if (!(lastClickTimestamp && ((currentTime - lastClickTimestamp) < 2000))) {
-      incrementEnergy(pointsPerClick);
-    }
-  }, [incrementPoints, incrementEnergy, pointsPerClick]);
+        const canIncrementEnergy = !lastClickTimestamp || 
+            (currentTime - lastClickTimestamp) >= ENERGY_COOLDOWN;
 
-  useEffect(() => {
-    const interval = setInterval(autoIncrement, 1000);
-    return () => clearInterval(interval);
-  }, [autoIncrement]);
+        if (canIncrementEnergy) {
+            incrementEnergy(pointsPerClick);
+        }
+    }, [incrementPoints, incrementEnergy]);
 
-  return null;
+    useEffect(() => {
+        const INTERVAL_DELAY = 1000; // 1 second interval
+        const interval = setInterval(autoIncrement, INTERVAL_DELAY);
+        return () => clearInterval(interval);
+    }, [autoIncrement]);
+
+    return null;
 }
