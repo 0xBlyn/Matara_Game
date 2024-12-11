@@ -2,12 +2,36 @@
 
 import Image from 'next/image';
 import { mainCharacter } from '@/images';
-import IceCube from '@/icons/IceCube';
 import Link from 'next/link';
+import ClaimButton from './ui/claim-button';
+import { useEffect, useState } from 'react';
+
+const TypewriterText = ({ text }: { text: string }) => {
+  const [displayText, setDisplayText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, 100); // Adjust speed here (lower number = faster)
+
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, text]);
+
+  return (
+    <h1 className="text-3xl font-bold mb-3">
+      {displayText}
+      <span className="animate-pulse">|</span>
+    </h1>
+  );
+};
 
 export default function Home() {
   return (
-    <div className="bg-[#1d2025] flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen">
       <div className="w-full max-w-xl text-white flex flex-col items-center">
         <div className="w-64 h-64 rounded-full circle-outer p-2 mb-8">
           <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
@@ -18,21 +42,13 @@ export default function Home() {
               style={{
                 objectFit: 'cover',
                 objectPosition: 'center',
-                transform: 'scale(1.05) translateY(10%)'
+                transform: 'scale(1.25) translateY(10%)'
               }}
             />
           </div>
         </div>
-        
-        <h1 className="text-3xl font-bold mb-4">Welcome to TonIce</h1>
-        
-        <p className="text-xl mb-6">The game is on the <Link href="/clicker" className="underline">Clicker</Link> page.</p>
-        
-        <div className="flex items-center space-x-2">
-          <IceCube className="w-8 h-8 animate-pulse" />
-          <IceCube className="w-8 h-8 animate-pulse delay-100" />
-          <IceCube className="w-8 h-8 animate-pulse delay-200" />
-        </div>
+        <TypewriterText text="Welcome to Matara" />
+        <Link href="/clicker" className="underline"><ClaimButton content="Get Started" /></Link>
       </div>
     </div>
   );

@@ -16,6 +16,9 @@
   }
 }
 
+body{
+  background: linear-gradient(359.69deg, #000F15 57.59%, #02354C 99.76%);
+}
 .progress-gradient {
   background: linear-gradient(to right, #90ef89, #d692dd, #726edd);
 }
@@ -52,7 +55,7 @@
 }
 
 .circle-outer {
-  background: linear-gradient(to bottom, #575def, #202731);
+  background: linear-gradient(90deg, #FFD683 0%, #FFB948 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,7 +66,7 @@
 }
 
 .circle-inner {
-  background: radial-gradient(circle, #4960b2, #282e3e);
+  background: linear-gradient(90deg, #FFD683 0%, #FFB948 100%);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -8,6 +8,29 @@ import { calculateEnergyLimit, calculateLevel, calculatePointsPerClick, calculat
 import dynamic from 'next/dynamic';
 import WebApp from '@twa-dev/sdk';
 
+const TypewriterText = ({ text }: { text: string }) => {
+  const [displayText, setDisplayText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, 100);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, text]);
+
+  return (
+    <h1 className="text-3xl font-bold mb-4">
+      {displayText}
+      <span className="animate-pulse">|</span>
+    </h1>
+  );
+};
+
 // Define the shape of the WebApp object
 interface WebAppType {
   ready: () => Promise<void>;
@@ -118,7 +141,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
   }, [isDataLoaded, setIsInitialized, setCurrentView]);
 
   return (
-    <div className="bg-[#1d2025] flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen">
       <div className="w-full max-w-xl text-white flex flex-col items-center">
         <div className="w-64 h-64 rounded-full circle-outer p-2 mb-8">
           <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
@@ -129,19 +152,13 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
               style={{
                 objectFit: 'cover',
                 objectPosition: 'center',
-                transform: 'scale(1.05) translateY(10%)'
+                transform: 'scale(1.25) translateY(10%)'
               }}
             />
           </div>
         </div>
 
-        <h1 className="text-3xl font-bold mb-4">Loading TonIce</h1>
-
-        <div className="flex items-center space-x-2">
-          <IceCube className="w-8 h-8 animate-pulse" />
-          <IceCube className="w-8 h-8 animate-pulse delay-100" />
-          <IceCube className="w-8 h-8 animate-pulse delay-200" />
-        </div>
+        <TypewriterText text="Loading Matara..." />
       </div>
     </div>
   );
