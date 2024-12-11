@@ -5,7 +5,23 @@ import Image from 'next/image';
 import { mainCharacter } from '@/images';
 import IceCube from '@/icons/IceCube';
 import { calculateEnergyLimit, calculateLevel, calculatePointsPerClick, calculateProfitPerHour, GameState, InitialGameState, useGameStore } from '@/utils/game-mechaincs';
+import dynamic from 'next/dynamic';
 import WebApp from '@twa-dev/sdk';
+
+// Define the shape of the WebApp object
+interface WebAppType {
+  ready: () => Promise<void>;
+  initData: string;
+  initDataUnsafe: {
+    user?: {
+      id: number;
+      username?: string;
+      first_name?: string;
+    };
+    start_param?: string;
+  };
+}
+
 
 interface LoadingProps {
   setIsInitialized: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,15 +35,23 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
 
   const fetchOrCreateUser = async () => {
     try {
-      WebApp.ready();
-      let initData = WebApp.initData;
-      const telegramId = WebApp.initDataUnsafe.user?.id.toString();
-      const username = WebApp.initDataUnsafe.user?.username || 'Unknown User';
-      const telegramName = WebApp.initDataUnsafe.user?.first_name || 'Unknown User';
+      let initData = '';
+      let telegramId = '';
+      let username = 'Unknown User';
+      let telegramName = 'Unknown User';
+      let referrerTelegramId = null;
 
-      // Extract referrer from start parameter
-      const startParam = new URLSearchParams(WebApp.initDataUnsafe.start_param || '').get('startapp');
-      const referrerTelegramId = startParam ? startParam.replace('kentId', '') : null;
+      if (typeof window !== 'undefined') {
+        await WebApp.ready();
+        initData = WebApp.initData;
+        telegramId = WebApp.initDataUnsafe.user?.id.toString() || '';
+        username = WebApp.initDataUnsafe.user?.username || 'Unknown User';
+        telegramName = WebApp.initDataUnsafe.user?.first_name || 'Unknown User';
+
+        // Extract referrer from start parameter
+        const startParam = new URLSearchParams(WebApp.initDataUnsafe.start_param || '').get('startapp');
+        referrerTelegramId = startParam ? startParam.replace('kentId', '') : null;
+      }
 
       if (process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH === 'true') {
         initData = "temp";
@@ -91,7 +115,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
 
       return () => clearTimeout(timer);
     }
-  }, [isDataLoaded, setIsInitialized]);
+  }, [isDataLoaded, setIsInitialized, setCurrentView]);
 
   return (
     <div className="bg-[#1d2025] flex justify-center items-center h-screen">
@@ -122,3 +146,4 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
     </div>
   );
 }
+
