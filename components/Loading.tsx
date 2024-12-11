@@ -148,7 +148,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
           </div>
         </div>
 
-        <TypewriterText text="Loading Matara..." />
+        <TypewriterText text="Loading Matara" />
       </div>
     </div>
   );
