@@ -125,7 +125,7 @@ export default function Friends() {
                   animate={{ opacity: 1 }}
                   className="text-center text-gray-400 py-4"
                 >
-                  You haven't invited anyone yet.
+                  You haven&apos;t invited anyone yet.
                 </motion.div>
               )}
             </AnimatePresence>
