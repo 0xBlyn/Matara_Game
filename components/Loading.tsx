@@ -1,12 +1,11 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { mainCharacter } from '@/images';
 import IceCube from '@/icons/IceCube';
 import { calculateEnergyLimit, calculateLevel, calculatePointsPerClick, calculateProfitPerHour, GameState, InitialGameState, useGameStore } from '@/utils/game-mechaincs';
 import dynamic from 'next/dynamic';
-import WebApp from '@twa-dev/sdk';
 
 const TypewriterText = ({ text }: { text: string }) => {
   const [displayText, setDisplayText] = useState('');
@@ -31,21 +30,6 @@ const TypewriterText = ({ text }: { text: string }) => {
   );
 };
 
-// Define the shape of the WebApp object
-interface WebAppType {
-  ready: () => Promise<void>;
-  initData: string;
-  initDataUnsafe: {
-    user?: {
-      id: number;
-      username?: string;
-      first_name?: string;
-    };
-    start_param?: string;
-  };
-}
-
-
 interface LoadingProps {
   setIsInitialized: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentView: (view: string) => void;
@@ -55,26 +39,35 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
   const initializeState = useGameStore((state: GameState) => state.initializeState);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const openTimestampRef = useRef(Date.now());
+  const [WebApp, setWebApp] = useState<any>(null);
 
-  const fetchOrCreateUser = async () => {
-    try {
-      let initData = '';
-      let telegramId = '';
-      let username = 'Unknown User';
-      let telegramName = 'Unknown User';
-      let referrerTelegramId = null;
-
+  useEffect(() => {
+    const loadWebApp = async () => {
       if (typeof window !== 'undefined') {
-        await WebApp.ready();
-        initData = WebApp.initData;
-        telegramId = WebApp.initDataUnsafe.user?.id.toString() || '';
-        username = WebApp.initDataUnsafe.user?.username || 'Unknown User';
-        telegramName = WebApp.initDataUnsafe.user?.first_name || 'Unknown User';
-
-        // Extract referrer from start parameter
-        const startParam = new URLSearchParams(WebApp.initDataUnsafe.start_param || '').get('startapp');
-        referrerTelegramId = startParam ? startParam.replace('kentId', '') : null;
+        try {
+          const WebAppModule = await import('@twa-dev/sdk');
+          setWebApp(WebAppModule.default);
+        } catch (error) {
+          console.error('Error loading WebApp:', error);
+        }
       }
+    };
+    loadWebApp();
+  }, []);
+
+  const fetchOrCreateUser = useCallback(async () => {
+    if (!WebApp) return;
+
+    try {
+      await WebApp.ready();
+      let initData = WebApp.initData;
+      let telegramId = WebApp.initDataUnsafe.user?.id.toString() || '';
+      let username = WebApp.initDataUnsafe.user?.username || 'Unknown User';
+      let telegramName = WebApp.initDataUnsafe.user?.first_name || 'Unknown User';
+
+      // Extract referrer from start parameter
+      const startParam = new URLSearchParams(WebApp.initDataUnsafe.start_param || '').get('startapp');
+      const referrerTelegramId = startParam ? startParam.replace('kentId', '') : null;
 
       if (process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH === 'true') {
         initData = "temp";
@@ -88,8 +81,6 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
         throw new Error('Failed to fetch or create user');
       }
       const userData = await response.json();
-
-      console.log("user data: ", userData);
 
       // Create the game store with fetched data
       const initialState: InitialGameState = {
@@ -111,19 +102,18 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
         profitPerHour: calculateProfitPerHour(userData.mineLevelIndex)
       };
 
-      console.log("Initial state: ", initialState);
-
       initializeState(initialState);
       setIsDataLoaded(true);
     } catch (error) {
       console.error('Error fetching user data:', error);
-      // Handle error (e.g., show error message to user)
     }
-  };
+  }, [WebApp, initializeState]);
 
   useEffect(() => {
-    fetchOrCreateUser();
-  }, []);
+    if (WebApp) {
+      fetchOrCreateUser();
+    }
+  }, [WebApp, fetchOrCreateUser]);
 
   useEffect(() => {
     if (isDataLoaded) {
