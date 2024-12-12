@@ -67,6 +67,7 @@ export interface GameState extends InitialGameState {
   upgradeMineLevelIndex: () => void
   setMiningActive: (active: boolean) => void;
   setMiningStartTime: (time: number) => void;
+  increaseMat: (amount: number) => void;
 }
 
 export const calculateLevel = (points: number): number => {
@@ -208,6 +209,7 @@ export const createGameStore = (initialState: InitialGameState) => create<GameSt
   }),
   setMiningActive: (active) => set({ isMiningActive: active }),
   setMiningStartTime: (time) => set({ miningStartTime: time }),
+  increaseMat: (amount) => set((state) => ({ totalMined: state.totalMined + amount })),
 }));
 
 export const useGameStore = createGameStore({
