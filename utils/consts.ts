@@ -24,55 +24,45 @@ export const mineUpgradeBaseBenefit = 100;
 export const mineUpgradeBenefitCoefficient = 1.2;
 
 
-
-
-
+export interface TaskData {
+  id: string;
+  title: string;
+  description: string;
+  tokens: number;
+  type: string;
+  image: string;
+  callToAction: string;
+  link: string;
+  taskStartTimestamp: Date | null;
+}
 
 export const earnData = [
   {
     category: "Social Tasks",
-    description: "Perform Social Tasks to earn more Matara Tokens ($MAT) and grow your rank.",
     tasks: [
       {
         id: "1",
         title: "Report X Post",
+        description: "Report a specific X post to help maintain community standards",
         tokens: 25,
         type: "twitter",
-        status: "pending", // can be 'pending', 'completed', or 'claimed'
         // image: "twitter",
         callToAction: "Perform Task",
-        link: "https://twitter.com/example_post_1"
+        link: "https://twitter.com/example_post_1",
+        taskStartTimestamp: null
       },
       {
         id: "2",
         title: "Share on TikTok",
+        description: "Share our content on your TikTok account",
         tokens: 50,
         type: "tiktok",
-        status: "pending",
         // image: "tiktok",
         callToAction: "Perform Task",
-        link: "https://tiktok.com/share"
-      },
-      {
-        id: "3",
-        title: "Follow FTLD on X",
-        tokens: 25,
-        type: "twitter",
-        status: "completed",
-        // image: "twitter",
-        callToAction: "Completed",
-        link: "https://twitter.com/FTLD"
-      },
-      {
-        id: "4",
-        title: "Like X Post",
-        tokens: 25,
-        type: "twitter",
-        status: "pending",
-        // image: "twitter",
-        callToAction: "Perform Task",
-        link: "https://twitter.com/example_post_2"
+        link: "https://tiktok.com/share",
+        taskStartTimestamp: null
       }
+      // ... other tasks
     ]
   }
 ];
