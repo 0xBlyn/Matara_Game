@@ -13,7 +13,7 @@ export default function TopSection() {
 
     return (
         <>
-            <div className="px-4 fixed top-0 min-w-full lg:max-w-[500px] flex mt-2 justify-between items-center">
+            <div className="px-4 fixed top-0 left-0 min-w-full lg:max-w-[500px] flex mt-2 justify-between items-center">
                 <div className="flex items-center">
                     <Link href='/clicker'>
                         <Image src={badge} width={160} height={40} alt='Badge' />

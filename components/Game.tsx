@@ -147,7 +147,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
       <div className="w-full flex-1 flex flex-col items-center pt-20">
         <TopInfoSection />
         
-        <div className="flex items-center justify-center my-[3%] w-full px-[10%] mt-15 lg:max-w-[300px]">
+        <div className="flex items-center fixed top-[15vh] justify-center my-[3%] w-full px-[10%] lg:max-w-[300px]">
           <div className="text-2xl font-bold text-right mt-7">
             <p className='text-[#4BF693] text-xs font-semibold'>Mining Mode</p>
             <p
@@ -158,11 +158,11 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                 backgroundClip: 'text'
               }}
             >
-              {points.toFixed(3)} <span className='text-semibold'>$MAT</span>
+              {points.toFixed(2)} <span className='text-semibold'>$MAT</span>
             </p>
           </div>
-          <div className="relative flex items-center justify-center w-full lg:mx-0">
-            <div className="relative justify-center">
+          <div className="relative flex items-center justify-center w-full -mx-[14%] lg:mx-0">
+            <div className="fixed justify-center">
             <Image
               className={`${isMiningActive ? '' : 'grayscale'}`}
               src={isSlashing ? hourglassBW : hourglass}
@@ -190,30 +190,21 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
             </div>
           </div>
           <div className="text-xl mt-7">
-            <p className='text-[#FFBF49] text-xs font-semibold'>Earning Rate</p>
-            <p className='font-semibold text-2xl leading-none'>{earningsPerSecond.toFixed(4)} <span className='text-sm leading-none font-base'>points/Sec</span></p>
+            <p className='text-[rgb(255,191,73)] text-xs pb-[2px] font-semibold'>Earning Rate</p>
+            <p className='font-bold text-xl leading-none'>{earningsPerSecond.toFixed(2)} <span className='text-sm leading-none font-base'>$MAT/Sec</span></p>
           </div>
         </div>
         
-        <div className="relative w-full flex flex-col items-center">
-          <button
-            onClick={handleStartMining}
-            disabled={isMiningActive}
-            className="button lg:max-w-[200px] z-10 transform translate-y-1/2"
-          >
-            Claim Daily Matara
-          </button>
-          <div className="w-full">
-            <Image 
-              src={lion} 
-              alt="Main Character" 
-              className="w-full object-cover mx-auto"
-              width={300}
-              height={300}
-              priority
-            />
-          </div>
-        </div>
+        <div className='fixed bottom-0 flex flex-col items-center'>
+      <button
+        onClick={handleStartMining}
+        disabled={isMiningActive}
+        className="button lg:max-w-[200px] lg:-mt-0 relative -mb-5"
+      >
+        Claim Daily Matara
+      </button>
+        <Image className='min-w-[100vw] flex  bottom-0 lg:max-w-[300px]' src={lion} alt="Main Character" width={100} height={100} />
+      </div>
       </div>
     </div>
   )
