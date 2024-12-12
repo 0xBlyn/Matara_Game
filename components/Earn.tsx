@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useGameStore } from '@/utils/game-mechaincs';
 import { formatNumber } from '@/utils/ui';
 import { ToastContainer } from 'react-toastify';
+import TopInfoSection from './TopInfoSection';
 
 interface Task {
   id: string;
@@ -81,21 +82,20 @@ export default function Earn() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a1118] text-white p-4">
+    <div>
+      <TopInfoSection rank={''} />
+      <div className="flex fixed top-20 flex-col justify-center">
       <ToastContainer />
-      <div className="max-w-xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-[#ffd700] mb-4">Social Task</h1>
-        <p className="text-center text-gray-400 mb-8">
-          Perform Social Tasks to earn more Matara<br />
-          Tokens ($MAT) and grow your rank.
-        </p>
-
-        <div className="grid grid-cols-3 text-sm text-gray-400 mb-4 px-4">
-          <div>Task</div>
-          <div>Earnings</div>
-          <div className="text-right">Action</div>
+      <div className='flex flex-col items-center w-full pt-7'>
+        <h1 className='heading mb-4'>Social Task</h1>
+        <h3 className='text-white text-[14px] font-medium text-center max-w-[70%]'>Perform Social Tasks to earn more Matara Tokens ($MAT) and grow your rank.</h3>
+      </div>
+      <div className="w-full pt-[12%] px-[5%]">
+        <div className="grid grid-cols-3 gap-4 px-4 mb-2 text-left border-gradient pb-3">
+          <div className="headtext">Task</div>
+          <div className="headtext">Earnings</div>
+          <div className="headtext">Action</div>
         </div>
-
         {isLoading ? (
           <div className="flex justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ffd700]" />
@@ -116,6 +116,7 @@ export default function Earn() {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default function TopInfoSection({ rank }: TopInfoSectionProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <div className="text-center">
+    <div className="text-center left-0 fixed">
       <h2 className="text-xl font-bold">{rank}</h2>
       <div className="w-full top-0 px-4 lg:max-w-[500px] sm:py-[3%] flex mt-4 z-50 fixed justify-between items-center">
         <div className="flex items-center">

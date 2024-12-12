@@ -158,7 +158,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                 backgroundClip: 'text'
               }}
             >
-              {points.toFixed(3)} <span className='text-semibold'>points</span>
+              {points.toFixed(3)} <span className='text-semibold'>$MAT</span>
             </p>
           </div>
           <div className="relative flex items-center justify-center w-full lg:mx-0 -mx-[8%]">
@@ -177,7 +177,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: arrowDirection === 'up' ? -20 : 20 }}
                   transition={{ duration: 0.3 }}
-                  className="absolute sm:w-[60px] top-0 mt-6 left-0 transform translate-x-1/2 translate-y-1/2 z-10"
+                  className="absolute top-0 mt-6 left-0 transform translate-x-1/2 translate-y-1/2 z-10"
                 >
                   <Image
                     src={isMiningActive ? activeArrow : inactiveArrow}
@@ -207,7 +207,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
             <Image 
               src={lion} 
               alt="Main Character" 
-              className="w-full object-cover max-w-[300px] mx-auto"
+              className="w-full object-cover mx-auto"
               width={300}
               height={300}
               priority

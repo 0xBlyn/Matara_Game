@@ -1,11 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { CuboidIcon as IceCubes, ChevronDown } from 'lucide-react'
 import { calculateMineUpgradeCost, calculateProfitPerHour, useGameStore } from '@/utils/game-mechaincs'
 import TopInfoSection from '@/components/TopInfoSection'
 import { formatNumber, showErrorMessage, showSuccessMessage } from '@/utils/ui'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
+import copyicon from '@/images/Group.png'
 
 interface LeaderboardEntry {
   username: string
@@ -77,34 +79,24 @@ export default function Mine() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0e12] flex justify-center">
-      <div className="w-full max-w-xl bg-[#0a0e12] text-white flex flex-col">
-        <TopInfoSection />
-
-        <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative">
-          <div className="absolute inset-0 top-[2px] bg-[#1d2025] rounded-t-[46px] px-4 py-6">
-            <h1 className="text-4xl font-bold text-center text-[#ffd700] mb-4">Ranking</h1>
-            <p className="text-center text-gray-400 mb-6 leading-relaxed text-sm">
-              Strive to be among Top100,000 members<br />
-              to be eligible for Matara Community<br />
-              Airdrop.
-            </p>
-
-            <button
-              onClick={() => router.push('/ranks')}
-              className="w-full bg-[#1a2028] border border-[#00ff9d] rounded-lg p-3 mb-8 flex items-center justify-center gap-2 text-[#00ff9d] hover:bg-[#1a2028]/80 transition-all duration-300"
-            >
-              See all Ranks
-              <span className="flex gap-1">👑🎮</span>
-              <ChevronDown className="w-4 h-4" />
-            </button>
-
-            <div className="grid grid-cols-3 text-sm text-gray-400 mb-4 px-4 border-b border-gray-800 pb-2">
-              <div>User Name</div>
-              <div>Rank</div>
-              <div className="text-right">Earnings</div>
+    <div className="min-h-screen flex justify-center">
+    <TopInfoSection rank={''} />
+    <div className="flex flex-col justify-center top-20 fixed">
+    <div className='flex flex-col items-center w-full pt-7'>
+        <h1 className='heading mb-4'>Ranking</h1>
+        <h3 className='text-white text-[16px] font-medium text-center max-w-[80%]'>Strive to be among Top 100,000 members to be eligible for Matara Community Airdrop.</h3>
+        <Link href="/ranks">
+            <div className="balance pages mt-4">
+             See all Ranks <span className='ml-2'><Image src={copyicon} width={20} height={20} alt='' /> </span>
             </div>
-
+        </Link>
+    </div>
+    <div className="w-full px-[5%] flex items-center justify-center flex-col pt-[8%]">
+        <div className="grid grid-cols-3 gap-14 w-full mb-2 text-left border-gradient pb-3">
+        <div className="headtext">User Name</div>
+        <div className="headtext">Rank</div>
+        <div className="headtext">Earnings</div>
+    </div>
             {isLeaderboardLoading ? (
               <div className="flex justify-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00ff9d]" />
@@ -114,11 +106,11 @@ export default function Mine() {
                 {leaderboardData.map((entry, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-3 items-center px-4 py-3"
+                    className="grid grid-cols-3 gap-14 items-centers py-3"
                   >
                     <div className="text-gray-300">@{entry.username}</div>
-                    <div className="text-[#00ff9d]">{entry.rank}</div>
-                    <div className="text-right text-[#00ff9d]">{entry.earnings.toLocaleString()} $MAT</div>
+                    <div className="text-gray-300">{entry.rank}</div>
+                    <div className="text-right text-[#44F58E]">{entry.earnings.toLocaleString()} $MAT</div>
                   </div>
                 ))}
               </div>
@@ -126,7 +118,6 @@ export default function Mine() {
           </div>
         </div>
       </div>
-    </div>
   )
 }
 
