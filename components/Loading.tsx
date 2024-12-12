@@ -44,42 +44,9 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
   const openTimestampRef = useRef(Date.now());
   const [loadingError, setLoadingError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const loadAndInitialize = async () => {
-      try {
-        if (process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH === 'true') {
-          // Development mode
-          await fetchOrCreateUser();
-          return;
-        }
-
-        const WebAppModule = await import('@twa-dev/sdk');
-        const WebApp = WebAppModule.default;
-        await WebApp.ready();
-        await fetchOrCreateUser();
-      } catch (error) {
-        console.error('Loading error:', error);
-        setLoadingError('Failed to initialize game');
-      }
-    };
-
-    loadAndInitialize();
-  }, []);
-
-  const fetchOrCreateUser = useCallback(async () => {
+  const fetchOrCreateUser = useCallback(async (initData: string, telegramName: string) => {
     try {
-      let initData = "temp";
-      let telegramName = "Developer";
-
-      if (process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH !== 'true') {
-        await WebApp?.ready?.();
-        initData = WebApp?.initData || "temp";
-        telegramName = WebApp?.initDataUnsafe?.user?.first_name || 'Unknown User';
-      }
-
       let url = `/api/user?initData=${encodeURIComponent(initData)}`;
-      
-      console.log('Fetching user data from:', url);
       const response = await fetch(url);
       
       if (!response.ok) {
@@ -87,8 +54,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
       }
       
       const userData = await response.json();
-      console.log('Received user data:', userData);
-
+      
       const initialState: InitialGameState = {
         userTelegramInitData: initData,
         userTelegramName: telegramName,
@@ -111,40 +77,40 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
         totalMined: 0
       };
 
-      console.log('Initializing game state with:', initialState);
       initializeState(initialState);
       setIsDataLoaded(true);
     } catch (error) {
       console.error('Error in fetchOrCreateUser:', error);
-      // In development, initialize with default state
-      if (process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH === 'true') {
-        const defaultState: InitialGameState = {
-          userTelegramInitData: "temp",
-          userTelegramName: "Developer",
-          lastClickTimestamp: Date.now(),
-          gameLevelIndex: 0,
-          points: 10000,
-          pointsBalance: 10000,
-          unsynchronizedPoints: 0,
-          multitapLevelIndex: 0,
-          pointsPerClick: 1,
-          energy: 100,
-          maxEnergy: 100,
-          energyRefillsLeft: 6,
-          energyLimitLevelIndex: 0,
-          lastEnergyRefillTimestamp: Date.now(),
-          mineLevelIndex: 0,
-          profitPerHour: 0,
-          isMiningActive: false,
-          miningStartTime: 0,
-          totalMined: 0
-        };
-        console.log('Using default state in development:', defaultState);
-        initializeState(defaultState);
-        setIsDataLoaded(true);
-      }
+      setLoadingError('Failed to initialize user data');
     }
-  }, [WebApp, initializeState]);
+  }, [initializeState]);
+
+  useEffect(() => {
+    const initializeGame = async () => {
+      if (typeof window === 'undefined') return;
+
+      try {
+        if (process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH === 'true') {
+          await fetchOrCreateUser('temp', 'Developer');
+          return;
+        }
+
+        const WebAppModule = await import('@twa-dev/sdk');
+        const WebApp = WebAppModule.default;
+        await WebApp.ready();
+        
+        const initData = WebApp.initData;
+        const telegramName = WebApp.initDataUnsafe?.user?.first_name || 'Unknown User';
+        
+        await fetchOrCreateUser(initData, telegramName);
+      } catch (error) {
+        console.error('Loading error:', error);
+        setLoadingError('Failed to initialize game');
+      }
+    };
+
+    initializeGame();
+  }, [fetchOrCreateUser]);
 
   useEffect(() => {
     if (isDataLoaded) {
