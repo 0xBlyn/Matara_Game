@@ -1,0 +1,356 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body{
+  background: linear-gradient(359.69deg, #000F15 57.59%, #02354C 99.76%);
+  overflow-y: hidden;
+}
+
+.progress-gradient {
+  background: linear-gradient(to right, #90ef89, #d692dd, #726edd);
+}
+
+.top-glow {
+  box-shadow: 0 -26px 20px rgba(243, 186, 47, 0.3);
+}
+
+/* Define the keyframes for the blinking animation */
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Apply the animation to the dot class */
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  animation: blink 1s infinite;
+}
+
+.circle-outer {
+  background: linear-gradient(90deg, #FFD683 0%, #FFB948 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90vw;
+  height: 90vw;
+  max-width: 360px;
+  max-height: 360px;
+}
+
+.circle-inner {
+  background: linear-gradient(359.69deg, #000F15 57.59%, #02354C 99.76%);
+  ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes float {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+.footer-btn {
+  position: relative;
+  overflow: hidden;
+  padding: 2px; /* Adjust padding to simulate border width */
+  background: linear-gradient(92.78deg, #012130 12.41%, #02354C 81.56%); /* Default background */
+  box-shadow: 0px -5px 10px 0px #FFC36940;
+  transition: background 0.3s ease; /* Smooth transition for background */
+}
+
+.footer-btn.active {
+  background: linear-gradient(90deg, #FFB939 0%, #FFD683 100%) !important; /* Active state background */
+  border: 3px solid transparent; /* Optional border */
+  box-shadow: 0px -5px 10px 0px #FFC36940; /* Keep the shadow */
+}
+
+.footer-btn.active > div {
+  background: transparent; /* Ensure the inner div does not override the button's background */
+}
+
+.footer-btn.active > div > p {
+  color: #000000; /* Change text color if needed */
+}
+
+.footer-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(92.78deg, #012130 12.41%, #02354C 81.56%); /* Default background for before */
+  z-index: -1;
+  margin: -2px; /* Adjust to match padding */
+}
+
+.footer-btn.active::before {
+  background: linear-gradient(90deg, #FFB939 0%, #FFD683 100%); /* Active state background for before */
+}
+
+.footer-btn > div {
+  background: linear-gradient(92.78deg, #000F15 12.41%, #02354C 81.56%); /* Default inner background */
+  padding: 10px;
+}
+
+.nav-text {
+  background-image: linear-gradient(92.78deg, #44F58E 12.41%, #FAFAFA 81.56%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: var(--font-gill-sans), sans-serif;
+  font-size: 16px;
+  font-weight: 1000;
+  line-height: 13px;
+  text-align: center;
+}
+.heading {
+  font-family: var(--font-gill-sans), sans-serif;
+  font-size: 36px;
+  font-weight: 1000;
+  line-height: 33.51px;
+  text-align: center;
+  background: linear-gradient(90deg, #FFD683 0%, #FFB948 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  width: fit-content;
+}
+.headtext {
+  background: linear-gradient(360deg, #CDCBC8 0%, #88837B 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  display: inline-block;
+  position: relative;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 17.53px;
+  text-align: left;
+}
+.greens{
+  color: #44F58E;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14.61px;
+  font-weight: 400;
+  line-height: 17.53px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;  
+}
+.users {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14.61px;
+  font-weight: 400;
+  line-height: 17.53px;
+  text-align: left;
+  background: linear-gradient(360deg, #CDCBC8 0%, #88837B 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  display: inline-block;
+  position: relative;
+}
+.rows{
+  padding: 1% 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.border-gradient {
+  border-bottom: 1.19px solid transparent;
+  border-image-source: linear-gradient(360deg, #CDCBC8 0%, #88837B 100%);
+  border-image-slice: 1;
+}
+.gill{
+  font-family: var(--font-gill-sans), sans-serif;
+}
+.balance {
+  position: relative;
+  background: linear-gradient(92.1deg, #000F15 -52.7%, #02354C 180.2%);
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 10.39px;
+  text-align: center;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(92.78deg, #44F58E 12.41%, #FAFAFA 81.56%);
+  box-shadow: 0px 0.12px 0.29px 0px #FFFFFF inset;
+  cursor: pointer;
+  overflow: hidden;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.balance::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid transparent;
+  border-radius: 4.62px;
+  background: linear-gradient(92.78deg, #44F58E 12.41%, #02354C 81.56%) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box, 
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) padding-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+}
+.connect-btn {
+  box-shadow: 0px 0px 26.55px 0px rgba(255, 195, 105, 0.25);
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font-gill-sans), sans-serif;
+  font-size: 12px;
+  font-weight: 1000;
+  line-height: 11.61px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  background: linear-gradient(90deg, #FFB939 0%, #FFD683 100%);
+  width: 88.6px;
+  height: 37.56px;
+  padding: 12.78px 14.8px;
+  gap: 6.64px;
+  opacity: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.connect-btn::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(90deg, #FFD683 0%, #FFB948 100%);
+  border-radius: 8px;
+  z-index: -1;
+}
+
+.connect-btn::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  border-radius: 6px;
+  z-index: -1;
+}
+.pages{
+  font-family: var(--font-gill-sans), sans-serif;
+  font-size: 18px;
+  font-weight: 1000;
+  line-height: 18px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;  
+  box-shadow: 0px 0px 40px 0px #FFC36940;
+  min-width: 60%;
+
+}
+.button {
+  background: linear-gradient(90deg, #FFB939 0%, #FFD683 100%);
+  width: 75%;
+  padding: 22px 40px;
+  border-radius: 8px;
+  font-family: var(--font-gill-sans), sans-serif;
+  font-size: 18px;
+  font-weight: 1000;
+  line-height: 17.27px;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #000000;
+  margin-bottom: -10%;
+  position: relative;
+  z-index: 2;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(90deg, #FFD683 0%, #FFB948 100%);
+  border-radius: 11px; /* 8px + 3px border */
+  z-index: -1;
+}
+
+.button::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background: inherit;
+  border-radius: 5px; /* 8px - 3px border */
+  z-index: -1;
+}
+
+.button:disabled {
+  background: linear-gradient(90deg, #BFA02B 0%, #C8B06A 100%);
+  color: #FFFFFF;
+  cursor: not-allowed;
+}
+
+.button:disabled::before {
+  background: linear-gradient(90deg, #C8B06A 0%, #BFA02B 100%);
+}
+
+.button:disabled::after {
+  background: linear-gradient(90deg, #BFA02B 0%, #C8B06A 100%);
+}
+
+
+
+.button:disabled {
+  background: linear-gradient(90deg, #BFA02B 0%, #C8B06A 100%);
+  color: linear-gradient(90deg, #f3ab24 0%, #ffaa00 100%);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* globals.css */
+.fixed-background {
+  background: linear-gradient(359.69deg, #000F15 57.59%, #02354C 99.76%);
+  height: 100vh; /* Full viewport height */
+  width: 100vw; /* Full viewport width */
+  top: 0; /* Align to the top */
+  left: 0; /* Align to the left */
+}
