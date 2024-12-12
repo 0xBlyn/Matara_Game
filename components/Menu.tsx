@@ -18,7 +18,7 @@ export function Menu({ isOpen, onClose }: MenuProps) {
 
   return (
     <div 
-      className="fixed inset-0 bg-black/50 z-[999999]"
+      className="fixed inset-0 bg-black/50 z-[2147483647]"
       onClick={onClose}
     >
       <div 

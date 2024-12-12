@@ -29,9 +29,17 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        console.log('Fetching profile with initData:', userTelegramInitData);
         const response = await fetch(`/api/profile?initData=${encodeURIComponent(userTelegramInitData)}`);
-        if (!response.ok) throw new Error('Failed to fetch profile');
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Profile fetch error:', errorData);
+          throw new Error(errorData.error || 'Failed to fetch profile');
+        }
+        
         const data = await response.json();
+        console.log('Profile data received:', data);
         setProfile(data);
       } catch (error) {
         console.error('Error:', error);
@@ -42,6 +50,9 @@ export default function ProfilePage() {
 
     if (userTelegramInitData) {
       fetchProfile();
+    } else {
+      console.log('No userTelegramInitData available');
+      setIsLoading(false);
     }
   }, [userTelegramInitData]);
 

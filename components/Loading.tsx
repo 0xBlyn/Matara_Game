@@ -1,3 +1,9 @@
+declare global {
+  interface Window {
+    Telegram: any;
+  }
+}
+
 import { useEffect, useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import mainCharacter from '@/images/main-character.png';
@@ -47,15 +53,16 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
             setWebApp({});
             return;
           }
+          
+          console.log('Telegram object:', window.Telegram);
+          
           const WebAppModule = await import('@twa-dev/sdk');
+          console.log('WebApp module loaded:', WebAppModule);
+          
           setWebApp(WebAppModule.default);
         } catch (error) {
           console.error('Error loading WebApp:', error);
           setLoadingError('Failed to load Telegram WebApp');
-          // In development, continue anyway
-          if (process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH === 'true') {
-            setWebApp({});
-          }
         }
       }
     };
