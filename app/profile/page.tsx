@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Shield } from 'lucide-react';
@@ -89,21 +87,10 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-        {/* Points and Rank Bar */}
-        <div className="w-full max-w-md relative h-12 bg-[#1a2028] rounded-lg overflow-hidden">
-          <div
-            className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#00ff9d] to-[#00ff9d]/50"
-            style={{ width: `${Math.min(100, (profile.points / 5000) * 100)}%` }}
-          />
-          <div className="absolute inset-0 flex items-center justify-between px-4">
-            <span className="text-white font-bold">{profile.points.toLocaleString()} $MAT</span>
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4" />
-              <span className="text-white font-bold">{profile.rank}</span>
-            </div>
-          </div>
+        <div className="flex items-center justify-between mb-8">
+          <div className="text-[#00ff9d] font-bold text-2xl">2,500 $MAT</div>
+          <div className="text-[#ffd700] font-bold text-2xl">WARRIOR</div>
         </div>
-        {/* Tasks Table */}
         <div>
           <h2 className="text-xl font-bold text-[#ffd700] mb-6">My Earnings</h2>
           <div className="grid grid-cols-2 text-sm text-gray-400 mb-4 px-4">
