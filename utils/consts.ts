@@ -39,7 +39,7 @@ export const earnData = [
         tokens: 25,
         type: "twitter",
         status: "pending", // can be 'pending', 'completed', or 'claimed'
-        image: "twitter",
+        // image: "twitter",
         callToAction: "Perform Task",
         link: "https://twitter.com/example_post_1"
       },
@@ -49,7 +49,7 @@ export const earnData = [
         tokens: 50,
         type: "tiktok",
         status: "pending",
-        image: "tiktok",
+        // image: "tiktok",
         callToAction: "Perform Task",
         link: "https://tiktok.com/share"
       },
@@ -59,7 +59,7 @@ export const earnData = [
         tokens: 25,
         type: "twitter",
         status: "completed",
-        image: "twitter",
+        // image: "twitter",
         callToAction: "Completed",
         link: "https://twitter.com/FTLD"
       },
@@ -69,7 +69,7 @@ export const earnData = [
         tokens: 25,
         type: "twitter",
         status: "pending",
-        image: "twitter",
+        // image: "twitter",
         callToAction: "Perform Task",
         link: "https://twitter.com/example_post_2"
       }
