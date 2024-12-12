@@ -14,14 +14,14 @@ const ClaimButton: React.FC<ClaimButtonProps> = ({ onClick, className = '', cont
         relative
         w-full
         max-w-md
-        py-2
-        px-6
+        py-3
+        px-8
         rounded-xl
         bg-gradient-to-r
         from-[#FFB939]
         to-[#FFD683]
         text-black
-        text-xl
+        text-2xl
         font-black
         font-['Impact']
         tracking-wide
@@ -34,7 +34,7 @@ const ClaimButton: React.FC<ClaimButtonProps> = ({ onClick, className = '', cont
         ${className}
       `}
     >
-      <span className="relative z-10">{content}</span>
+      <span >{content}</span>
       <span 
         className="
           absolute 

@@ -58,8 +58,8 @@ export default function ProfilePage() {
 
   if (isLoading || !profile) {
     return (
-      <div className="min-h-screen bg-[#0a1118] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00ff9d]" />
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[3.61px solid linear-gradient(92.78deg, #44F58E 12.41%, #02354C 81.56%)]" />
       </div>
     );
   }
@@ -67,7 +67,7 @@ export default function ProfilePage() {
   const hasCompletedTasks = profile.completedTasks && profile.completedTasks.length > 0;
 
   return (
-    <div className="min-h-screen bg-[#0a1118] text-white p-4">
+    <div className="min-h-screen text-white p-4">
       <TopSection />
       <div className="max-w-xl mx-auto pt-20">
         <div className="flex items-center mb-8">

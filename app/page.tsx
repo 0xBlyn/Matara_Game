@@ -33,10 +33,9 @@ const TypewriterText = ({ text }: { text: string }) => {
 export default function Home() {
   return (
     <main>
-      <TelegramAuth />
       <div className="flex justify-center items-center h-screen">
         <div className="w-full max-w-xl text-white flex flex-col items-center">
-          <div className="w-64 h-64 rounded-full circle-outer p-2 mb-8">
+          <div className="w-64 h-64 rounded-full circle-outer p-2 mb-5">
             <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
               <Image
                 src={mainCharacter}
@@ -51,7 +50,7 @@ export default function Home() {
             </div>
           </div>
           <TypewriterText text="Welcome to Matara" />
-          <Link href="/clicker" className="underline"><ClaimButton content="Get Started" /></Link>
+         <TelegramAuth />
         </div>
       </div>
     </main>

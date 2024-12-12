@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useGameStore } from '@/utils/game-mechaincs'
+import ClaimButton from '@/app/ui/claim-button'
 
 export default function TelegramAuth() {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -70,13 +71,10 @@ export default function TelegramAuth() {
                 <p>Redirecting to game...</p>
             ) : (
                 <div>
-                    <p>You need to be an owner of this account</p>
-                    <button
+                    <ClaimButton
                         onClick={authenticateUser}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                        Authenticate
-                    </button>
+                        content="Get Started"
+                    />
                 </div>
             )}
         </div>
