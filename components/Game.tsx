@@ -147,7 +147,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
       <div className="w-full flex-1 flex flex-col items-center pt-20">
         <TopInfoSection />
         
-        <div className="flex items-center fixed top-[15vh] justify-center my-[3%] w-full px-[10%] lg:max-w-[300px]">
+        <div className="flex min-h-[35vh] items-center fixed top-[15vh] justify-center my-[3%] w-full px-[10%] lg:max-w-[300px]">
           <div className="text-2xl font-bold text-right mt-7">
             <p className='text-[#4BF693] text-xs font-semibold'>Mining Mode</p>
             <p
