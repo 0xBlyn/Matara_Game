@@ -27,6 +27,7 @@ export async function encrypt(payload: any) {
 }
 
 export async function decrypt(input: string): Promise<any> {
+    const key = getKey()
     const { payload } = await jwtVerify(input, key, {
         algorithms: ["HS256"],
     })
