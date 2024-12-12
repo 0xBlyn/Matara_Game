@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Crown, Sword, Shield } from 'lucide-react'
+import { Crown } from 'lucide-react'
 
 interface LeaderboardEntry {
   username: string
@@ -44,11 +44,10 @@ export default function LeaderboardPage() {
 
         <button
           onClick={() => router.push('/ranks')}
-          className="w-full bg-[#00ff9d] bg-opacity-10 border border-[#00ff9d] rounded-lg p-3 mb-8 flex items-center justify-center gap-2 text-[#00ff9d] hover:bg-opacity-20 transition-all duration-300 relative group"
+          className="w-full bg-[#00ff9d] bg-opacity-10 border border-[#00ff9d] rounded-lg p-3 mb-8 flex items-center justify-center gap-2 text-[#00ff9d] hover:bg-opacity-20 transition-all duration-300"
         >
-          <span className="relative z-10">See all Ranks</span>
+          See all Ranks
           <span className="flex gap-1">👑🎮</span>
-          <div className="absolute inset-0 bg-[#00ff9d] opacity-0 group-hover:opacity-5 rounded-lg transition-opacity duration-300" />
         </button>
 
         <div className="grid grid-cols-3 text-sm text-gray-400 mb-4 px-4">
@@ -62,7 +61,7 @@ export default function LeaderboardPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00ff9d]" />
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar">
             {leaderboardData.map((entry, index) => (
               <div
                 key={index}

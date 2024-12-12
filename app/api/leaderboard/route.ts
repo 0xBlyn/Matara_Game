@@ -31,7 +31,7 @@ export async function GET(req: Request) {
       orderBy: {
         pointsBalance: 'desc',
       },
-      take: 10,
+      take: 50,
     });
 
     const formattedLeaderboard = leaderboard.map((entry, index) => ({
