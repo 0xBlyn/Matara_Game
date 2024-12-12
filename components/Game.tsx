@@ -17,6 +17,15 @@ interface GameProps {
   setCurrentView: (newView: string) => void
 }
 
+// Add rank calculations
+const RANKS = [
+  { name: "Novice Miner", threshold: 0 },
+  { name: "Bronze Miner", threshold: 1000 },
+  { name: "Silver Miner", threshold: 5000 },
+  { name: "Gold Miner", threshold: 10000 },
+  { name: "Diamond Miner", threshold: 50000 }
+];
+
 export default function Game({ currentView, setCurrentView }: GameProps) {
   const {
     isMiningActive,
@@ -35,6 +44,38 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
 
   const miningDuration = 12 * 60 * 60 * 1000 // 12 hours in milliseconds
   const slashingRate = 0.00001 // Points lost per second during slashing mode
+
+  // Add new state for rank
+  const [currentRank, setCurrentRank] = useState(RANKS[0]);
+
+  // Sync with backend every 30 seconds
+  useEffect(() => {
+    const syncInterval = setInterval(async () => {
+      try {
+        const response = await fetch('/api/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ points, miningStartTime, isMiningActive })
+        });
+        const data = await response.json();
+        // Update local state with server data
+        if (data.points) incrementPoints(data.points - points);
+      } catch (error) {
+        console.error('Sync error:', error);
+      }
+    }, 30000);
+
+    return () => clearInterval(syncInterval);
+  }, [points, miningStartTime, isMiningActive]);
+
+  // Update rank based on points
+  useEffect(() => {
+    const newRank = RANKS.reduce((acc, rank) => {
+      if (points >= rank.threshold) return rank;
+      return acc;
+    }, RANKS[0]);
+    setCurrentRank(newRank);
+  }, [points]);
 
   const calculateTimeLeft = useCallback(() => {
     if (isMiningActive) {
@@ -102,77 +143,77 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   }, [profitPerHour])
 
   return (
-    <div className="fixed w-full top-20 max-h-[80vh] text-white flex flex-col items-center justify-center">
-      <TopInfoSection />
-      <div className="flex items-center justify-center w-full h-full px-[10%] mt-16 lg:max-w-[300px]">
-        <div className="text-2xl font-bold text-right mt-7">
-          <p className='text-[#4BF693] text-xs font-semibold'>Mining Mode</p>
-          <p
-            className="font-black leading-none text-2xl text-transparent bg-clip-text"
-            style={{
-              backgroundImage: 'linear-gradient(92.78deg, #44F58E 12.41%, #FAFAFA 81.56%)',
-              WebkitBackgroundClip: 'text',
-              backgroundClip: 'text'
-            }}
-          >
-            {points.toFixed(3)} <span className='text-semibold'>points</span>
-          </p>
-        </div>
-        <div className="relative flex items-center justify-center w-full lg:mx-0 -mx-[8%]">
-          <div className="relative justify-center">
-            <Image 
-              className='sm:w-[120px]' 
-              src={isSlashing ? hourglassBW : hourglass} 
-              alt="Hourglass" 
-              width={80} 
-              height={80} 
-            />
-            <AnimatePresence>
-              <motion.div
-                key={arrowDirection}
-                initial={{ opacity: 0, y: arrowDirection === 'up' ? 20 : -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: arrowDirection === 'up' ? -20 : 20 }}
-                transition={{ duration: 0.3 }}
-                className="absolute sm:w-[60px] top-0 mt-6 left-0 transform translate-x-1/2 translate-y-1/2 z-10"
-              >
-                <Image
-                  src={isMiningActive ? activeArrow : inactiveArrow}
-                  alt="Mining Status Arrow"
-                  width={40}
-                  height={40}
-                />
-              </motion.div>
-            </AnimatePresence>
+    <div className="fixed w-full h-screen flex flex-col items-center justify-between">
+      <div className="w-full flex-1 flex flex-col items-center pt-20">
+        <TopInfoSection rank={currentRank.name} />
+        
+        <div className="flex items-center justify-center w-full px-[10%] mt-16 lg:max-w-[300px]">
+          <div className="text-2xl font-bold text-right mt-7">
+            <p className='text-[#4BF693] text-xs font-semibold'>Mining Mode</p>
+            <p
+              className="font-black leading-none text-2xl text-transparent bg-clip-text"
+              style={{
+                backgroundImage: 'linear-gradient(92.78deg, #44F58E 12.41%, #FAFAFA 81.56%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text'
+              }}
+            >
+              {points.toFixed(3)} <span className='text-semibold'>points</span>
+            </p>
+          </div>
+          <div className="relative flex items-center justify-center w-full lg:mx-0 -mx-[8%]">
+            <div className="relative justify-center">
+              <Image 
+                className='sm:w-[120px]' 
+                src={isSlashing ? hourglassBW : hourglass} 
+                alt="Hourglass" 
+                width={80} 
+                height={80} 
+              />
+              <AnimatePresence>
+                <motion.div
+                  key={arrowDirection}
+                  initial={{ opacity: 0, y: arrowDirection === 'up' ? 20 : -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: arrowDirection === 'up' ? -20 : 20 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute sm:w-[60px] top-0 mt-6 left-0 transform translate-x-1/2 translate-y-1/2 z-10"
+                >
+                  <Image
+                    src={isMiningActive ? activeArrow : inactiveArrow}
+                    alt="Mining Status Arrow"
+                    width={40}
+                    height={40}
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+          <div className="text-xl mt-7">
+            <p className='text-[#FFBF49] text-xs font-semibold'>Earning Rate</p>
+            <p className='font-semibold text-2xl leading-none'>{earningsPerSecond.toFixed(4)} <span className='text-lg leading-none font-base'>points/Sec</span></p>
           </div>
         </div>
-        <div className="text-xl mt-7">
-          <p className='text-[#FFBF49] text-xs font-semibold'>Earning Rate</p>
-          <p className='font-semibold text-2xl leading-none'>{earningsPerSecond.toFixed(4)} <span className='text-lg leading-none font-base'>points/Sec</span></p>
+        
+        <div className="relative w-full flex flex-col items-center mt-auto">
+          <button
+            onClick={handleStartMining}
+            disabled={isMiningActive}
+            className="button lg:max-w-[200px] z-10 transform translate-y-1/2"
+          >
+            Claim Daily Matara
+          </button>
+          <div className="w-full">
+            <Image 
+              src={lion} 
+              alt="Main Character" 
+              className="w-full object-cover max-w-[300px] mx-auto"
+              width={300}
+              height={300}
+              priority
+            />
+          </div>
         </div>
-      </div>
-      {isMiningActive ? (
-        <p className="mb-3 sm:py-1 pt-1 z-[9999] -mt-2 text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #FFD683 0%, #FFB948 100%)' }}>
-          Mining Resets in <span style={{ color: '#fff' }}>{timeLeft}</span>
-        </p>
-      ) : isSlashing ? (
-        <p className="mb-3 sm:py-1 pt-1 z-[9999] -mt-2 text-red-500">
-          Slashing Mode Active! Claim to stop losing points
-        </p>
-      ) : (
-        <p className="mb-3 sm:py-1 pt-5 z-[9999] -mt-2 text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #FFD683 0%, #FFB948 100%)' }}>
-          Start your Daily Mining
-        </p>
-      )}
-      <div className='fixed bottom-0 flex flex-col items-center'>
-        <button
-          onClick={handleStartMining}
-          className="button lg:max-w-[200px] lg:-mt-0 relative -top-5"
-          disabled={isMiningActive}
-        >
-          Claim Daily Matara
-        </button>
-        <Image className='min-w-[100vw] flex bottom-0 lg:max-w-[300px]' src={lion} alt="Main Character" width={100} height={100} />
       </div>
     </div>
   )
