@@ -80,7 +80,7 @@ export default function Mine() {
 
   return (
     <div className="min-h-screen flex justify-center">
-    <TopInfoSection rank={''} />
+    <TopInfoSection />
     <div className="flex flex-col justify-center top-20 fixed">
     <div className='flex flex-col items-center w-full pt-7'>
         <h1 className='heading mb-4'>Ranking</h1>
