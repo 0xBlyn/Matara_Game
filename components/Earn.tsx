@@ -10,8 +10,49 @@ interface Task {
   title: string;
   tokens: number;
   type: string;
-  status: 'pending' | 'completed';
+  status: 'pending' | 'completed' | 'claimed';
+  image: string;
+  callToAction: string;
+  link: string;
 }
+
+const TaskButton = ({ task }: { task: Task }) => {
+  const getButtonStyle = () => {
+    switch (task.status) {
+      case 'completed':
+        return 'bg-green-500 opacity-50 cursor-not-allowed';
+      case 'claimed':
+        return 'bg-gray-500 opacity-50 cursor-not-allowed';
+      default:
+        return 'bg-[#FFB948] hover:bg-[#FFA925]';
+    }
+  };
+
+  const getButtonText = () => {
+    switch (task.status) {
+      case 'completed':
+        return 'Completed';
+      case 'claimed':
+        return 'Claimed';
+      default:
+        return 'Perform Task';
+    }
+  };
+
+  return (
+    <button
+      disabled={task.status === 'completed' || task.status === 'claimed'}
+      className={`px-4 py-2 rounded-lg text-sm font-medium ${getButtonStyle()}`}
+      onClick={() => {
+        if (task.link) {
+          window.open(task.link, '_blank');
+        }
+      }}
+    >
+      {getButtonText()}
+    </button>
+  );
+};
 
 export default function Earn() {
   const { userTelegramInitData } = useGameStore();
@@ -62,25 +103,13 @@ export default function Earn() {
         ) : (
           <div className="space-y-3">
             {tasks.map((task) => (
-              <div
-                key={task.id}
-                className="grid grid-cols-3 items-center px-4 py-3 text-gray-300"
-              >
-                <div>{task.title}</div>
-                <div>{task.tokens} $MAT</div>
-                <div className="text-right">
-                  {task.status === 'completed' ? (
-                    <span className="px-4 py-1 bg-green-500/20 text-green-500 rounded-full text-sm">
-                      Completed
-                    </span>
-                  ) : (
-                    <button
-                      onClick={() => handleTaskAction(task.id)}
-                      className="px-4 py-1 bg-[#ffd700] text-black rounded-full text-sm hover:bg-[#ffd700]/90 transition-colors"
-                    >
-                      Perform Task
-                    </button>
-                  )}
+              <div key={task.id} className="flex justify-between items-center py-3 border-b border-gray-700">
+                <div className="flex-1">
+                  <p className="text-white">{task.title}</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-[#FFB948]">{task.tokens} $MAT</span>
+                  <TaskButton task={task} />
                 </div>
               </div>
             ))}
