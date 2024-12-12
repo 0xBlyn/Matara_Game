@@ -9,8 +9,6 @@ import Earn from '@/components/Earn';
 import Airdrop from '@/components/Airdrop';
 import Navigation from '@/components/Navigation';
 import LoadingScreen from '@/components/Loading';
-import { energyUpgradeBaseBenefit } from '@/utils/consts';
-import Boost from '@/components/Boost';
 import { ToastContainer } from 'react-toastify';
 import { AutoIncrement } from '@/components/AutoIncrement';
 import { PointSynchronizer } from '@/components/PointSynchronizer';
@@ -38,11 +36,6 @@ function ClickerPage() {
                     currentView={currentView}
                     setCurrentView={setCurrentView}
                 />;
-            case 'boost':
-                return <Boost
-                    currentView={currentView}
-                    setCurrentView={setCurrentView}
-                />
             case 'mine':
                 return <Mine />;
             case 'friends':

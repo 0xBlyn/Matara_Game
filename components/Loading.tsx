@@ -1,9 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { mainCharacter } from '@/images';
-import IceCube from '@/icons/IceCube';
+import mainCharacter from '@/images/main-character.png';
 import { calculateEnergyLimit, calculateLevel, calculatePointsPerClick, calculateProfitPerHour, GameState, InitialGameState, useGameStore } from '@/utils/game-mechaincs';
-import dynamic from 'next/dynamic';
 
 const TypewriterText = ({ text }: { text: string }) => {
   const [displayText, setDisplayText] = useState('');
