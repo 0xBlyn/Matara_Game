@@ -100,7 +100,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   };
 
   return (
-    <div className="bg-black flex justify-center">
+    <div className="flex justify-center">
       <div className="w-full bg-black text-white h-screen font-bold flex flex-col max-w-xl">
         <TopInfoSection />
 

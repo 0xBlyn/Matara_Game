@@ -25,11 +25,10 @@ export function PointSynchronizer() {
     const syncTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const syncWithServer = useCallback(async () => {
-        if (unsynchronizedPoints < MIN_POINTS_TO_SYNC) return;
+        if (!userTelegramInitData || unsynchronizedPoints < MIN_POINTS_TO_SYNC) return;
         
         const frozenPointsToSynchronize = unsynchronizedPoints;
-        showSuccessMessage(`Synchronizing ${frozenPointsToSynchronize} points...`);
-
+        
         try {
             const payload: SyncPayload = {
                 initData: userTelegramInitData,
@@ -48,9 +47,8 @@ export function PointSynchronizer() {
             }
 
             const updatedUnsynchronizedPoints = Math.max(0, unsynchronizedPoints - frozenPointsToSynchronize);
-            showSuccessMessage(`Synchronized! Remaining points: ${updatedUnsynchronizedPoints}`);
+            console.log('Sync successful:', { updatedUnsynchronizedPoints });
         } catch (error) {
-            showErrorMessage('Failed to sync with server');
             console.error('Sync error:', error);
         }
     }, [userTelegramInitData, unsynchronizedPoints, energy]);

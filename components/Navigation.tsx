@@ -32,7 +32,7 @@ export default function Navigation({ currentView, setCurrentView }: NavigationPr
     };
 
     return (
-        <nav className="fixed lg:max-w-[300px] bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-full flex justify-around items-center z-50 rounded-3xl text-xs">
+        <nav className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-full flex justify-around items-center z-50 rounded-3xl text-xs">
             <div className="absolute -mt-[22%] -ml-[1.5%] flex w-full justify-center">
                 <Image 
                     src={circlelion} 

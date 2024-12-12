@@ -42,7 +42,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({ task, onClose, onComplete }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-[#272a2f] rounded-2xl p-6 max-w-sm w-full">
+      <div className="rounded-2xl p-6 max-w-sm w-full">
         <button onClick={onClose} className="float-right text-gray-400 hover:text-white">&times;</button>
         <Image src={imageMap[task.image]} alt={task.title} width={80} height={80} className="mx-auto mb-4" />
         <h2 className="text-3xl text-white text-center font-bold mb-2">{task.title}</h2>
