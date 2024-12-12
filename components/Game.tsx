@@ -195,7 +195,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
           </div>
         </div>
         
-        <div className='fixed max-h-[45vh] bottom-0 flex flex-col items-center'>
+        <div className='fixed max-h-[65vh] bottom-0 flex flex-col items-center'>
       <button
         onClick={handleStartMining}
         disabled={isMiningActive}
