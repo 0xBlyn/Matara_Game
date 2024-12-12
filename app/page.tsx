@@ -6,6 +6,7 @@ import Link from 'next/link';
 import ClaimButton from './ui/claim-button';
 import { useEffect, useState } from 'react';
 import TelegramAuth from '@/components/telegramAuth'
+import { checkEnvironment } from '@/utils/env-check';
 
 const TypewriterText = ({ text }: { text: string }) => {
   const [displayText, setDisplayText] = useState('');
@@ -31,6 +32,12 @@ const TypewriterText = ({ text }: { text: string }) => {
 };
 
 export default function Home() {
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'production') {
+      checkEnvironment();
+    }
+  }, []);
+
   return (
     <main>
       <div className="flex justify-center items-center h-screen">

@@ -654,3 +654,17 @@ body{
   justify-content: center;
   height: 50vh; /* Adjustable container height */
 }
+
+@layer utilities {
+  .responsive-container {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .responsive-text {
+    @apply text-base sm:text-lg md:text-xl lg:text-2xl;
+  }
+  
+  .responsive-padding {
+    @apply p-4 sm:p-6 md:p-8 lg:p-10;
+  }
+}

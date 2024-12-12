@@ -8,6 +8,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import mainCharacter from '@/images/main-character.png';
 import { calculateEnergyLimit, calculateLevel, calculatePointsPerClick, calculateProfitPerHour, GameState, InitialGameState, useGameStore } from '@/utils/game-mechaincs';
+import WebApp from '@twa-dev/sdk';
 
 const TypewriterText = ({ text }: { text: string }) => {
   const [displayText, setDisplayText] = useState('');
@@ -41,32 +42,28 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
   const initializeState = useGameStore((state: GameState) => state.initializeState);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const openTimestampRef = useRef(Date.now());
-  const [WebApp, setWebApp] = useState<any>(null);
   const [loadingError, setLoadingError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadWebApp = async () => {
-      if (typeof window !== 'undefined') {
-        try {
-          if (process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH === 'true') {
-            console.log('Development mode: Bypassing Telegram WebApp');
-            setWebApp({});
-            return;
-          }
-          
-          console.log('Telegram object:', window.Telegram);
-          
-          const WebAppModule = await import('@twa-dev/sdk');
-          console.log('WebApp module loaded:', WebAppModule);
-          
-          setWebApp(WebAppModule.default);
-        } catch (error) {
-          console.error('Error loading WebApp:', error);
-          setLoadingError('Failed to load Telegram WebApp');
+    const loadAndInitialize = async () => {
+      try {
+        if (process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH === 'true') {
+          // Development mode
+          await fetchOrCreateUser();
+          return;
         }
+
+        const WebAppModule = await import('@twa-dev/sdk');
+        const WebApp = WebAppModule.default;
+        await WebApp.ready();
+        await fetchOrCreateUser();
+      } catch (error) {
+        console.error('Loading error:', error);
+        setLoadingError('Failed to initialize game');
       }
     };
-    loadWebApp();
+
+    loadAndInitialize();
   }, []);
 
   const fetchOrCreateUser = useCallback(async () => {
@@ -148,12 +145,6 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
       }
     }
   }, [WebApp, initializeState]);
-
-  useEffect(() => {
-    if (WebApp) {
-      fetchOrCreateUser();
-    }
-  }, [WebApp, fetchOrCreateUser]);
 
   useEffect(() => {
     if (isDataLoaded) {

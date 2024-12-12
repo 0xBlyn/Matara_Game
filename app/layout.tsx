@@ -25,16 +25,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
-      <head>
-      </head>
-      <body className={`${inter.className} ${gillSans.variable} fixed-background`}>
-        {children}
+      <body className="min-h-screen bg-gradient-to-b from-[#0a0e12] to-[#1a1f24]">
+        <div className="responsive-container min-h-screen">
+          {children}
+        </div>
       </body>
     </html>
-  );
+  )
 }
