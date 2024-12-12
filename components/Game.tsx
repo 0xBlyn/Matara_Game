@@ -1,18 +1,18 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import Image from 'next/image'
-import { useGameStore } from '@/utils/game-mechaincs'
-import TopInfoSection from './TopInfoSection'
-import activeArrow from '@/images/active.png'
-import inactiveArrow from '@/images/inactive.png'
-import lion from '@/images/Group 113 (1).png'
-import hourglass from '@/images/image 27 (1).png'
-import hourglassBW from '@/images/image 27.png'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useSound } from 'use-sound'
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import Image from 'next/image';
+import { useGameStore } from '@/utils/game-mechaincs';
+import TopInfoSection from './TopInfoSection';
+import activeArrow from '@/images/active.png';
+import inactiveArrow from '@/images/inactive.png';
+import lion from '@/images/Group 113 (1).png';
+import hourglass from '@/images/image 27 (1).png';
+import hourglassBW from '@/images/image 27.png';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useSound } from 'use-sound';
 
 interface GameProps {
-  currentView: string
-  setCurrentView: (newView: string) => void
+  currentView: string;
+  setCurrentView: (newView: string) => void;
 }
 
 const RANKS = [
@@ -32,16 +32,16 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
     profitPerHour,
     points,
     incrementPoints,
-  } = useGameStore()
+  } = useGameStore();
 
-  const [timeLeft, setTimeLeft] = useState('')
-  const [arrowDirection, setArrowDirection] = useState('down')
-  const [isSlashing, setIsSlashing] = useState(false)
-  const [playSound] = useSound('/arrow-change.mp3')
-  const [currentRank, setCurrentRank] = useState(RANKS[0])
+  const [timeLeft, setTimeLeft] = useState('');
+  const [arrowDirection, setArrowDirection] = useState('down');
+  const [isSlashing, setIsSlashing] = useState(false);
+  const [playSound] = useSound('/arrow-change.mp3');
+  const [currentRank, setCurrentRank] = useState(RANKS[0]);
 
-  const miningDuration = 12 * 60 * 60 * 1000
-  const slashingRate = 0.00001
+  const miningDuration = 12 * 60 * 60 * 1000;
+  const slashingRate = 0.00001;
 
   useEffect(() => {
     const syncInterval = setInterval(async () => {
@@ -49,7 +49,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
         const response = await fetch('/api/sync', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ points, miningStartTime, isMiningActive })
+          body: JSON.stringify({ points, miningStartTime, isMiningActive }),
         });
         const data = await response.json();
         if (data.points) incrementPoints(data.points - points);
@@ -69,7 +69,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
     setCurrentRank(newRank);
   }, [points]);
 
-  const calculateTimeLeft = useCallback(() => {
+  const calculateTimeLeft = useCallback((): string => {
     if (isMiningActive) {
       const currentTime = Date.now()
       const timeElapsed = currentTime - miningStartTime
@@ -91,62 +91,52 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   }, [isMiningActive, miningStartTime, setMiningActive])
 
   const handleStartMining = useCallback(() => {
-    try {
-      if (!isMiningActive) {
-        setMiningActive(true)
-        setMiningStartTime(Date.now())
-        setArrowDirection('up')
-        setIsSlashing(false)
-        playSound()
-      }
-    } catch (error) {
-      console.error('Error starting mining:', error)
-    }
-  }, [isMiningActive, setMiningActive, setMiningStartTime, playSound])
+    // ... (existing code)
+  }, [isMiningActive, setMiningActive, setMiningStartTime, playSound]);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout
+    let timer: NodeJS.Timeout;
     try {
       timer = setInterval(() => {
-        setTimeLeft(calculateTimeLeft())
+        setTimeLeft(calculateTimeLeft());
         if (isSlashing) {
-          incrementPoints(-slashingRate)
+          incrementPoints(-slashingRate);
         } else if (isMiningActive) {
-          const increase = profitPerHour / 3600
+          const increase = profitPerHour / 3600;
           if (!isNaN(increase)) {
-            incrementPoints(increase)
+            incrementPoints(increase);
           }
         }
-      }, 1000)
+      }, 1000);
     } catch (error) {
-      console.error('Error in mining calculation:', error)
+      console.error('Error in mining calculation:', error);
     }
     return () => {
-      if (timer) clearInterval(timer)
-    }
-  }, [isMiningActive, isSlashing, calculateTimeLeft, incrementPoints, profitPerHour])
+      if (timer) clearInterval(timer);
+    };
+  }, [isMiningActive, isSlashing, calculateTimeLeft, incrementPoints, profitPerHour]);
 
   const earningsPerSecond = useMemo(() => {
-    const earnings = profitPerHour / 3600
-    return isNaN(earnings) ? 0 : earnings
-  }, [profitPerHour])
+    const earnings = profitPerHour / 3600;
+    return isNaN(earnings) ? 0 : earnings;
+  }, [profitPerHour]);
 
   return (
-    <div className="fixed w-full h-screen flex flex-col items-center justify-between">
-      <div className="w-full flex-1 flex flex-col items-center pt-20">
+    <div className="flex flex-col items-center justify-between h-screen">
+      <div className="flex flex-col items-center pt-20 w-full">
         <TopInfoSection />
-        <div className="flex items-center justify-center my-[3%] w-full px-[10%] lg:max-w-[300px]">
+        <div className="flex items-center justify-center my-6 w-full px-4 lg:max-w-[300px]">
           <div className="text-2xl font-bold text-right mt-7">
-            <p className='text-[#4BF693] text-xs font-semibold'>Mining Mode</p>
+            <p className="text-[#4BF693] text-xs font-semibold">Mining Mode</p>
             <p
               className="font-black leading-none text-2xl text-transparent bg-clip-text"
               style={{
                 backgroundImage: 'linear-gradient(92.78deg, #44F58E 12.41%, #FAFAFA 81.56%)',
                 WebkitBackgroundClip: 'text',
-                backgroundClip: 'text'
+                backgroundClip: 'text',
               }}
             >
-              {points.toFixed(2)} <span className='text-semibold'>$MAT</span>
+              {points.toFixed(2)} <span className="text-semibold">$MAT</span>
             </p>
           </div>
           <div className="relative flex items-center justify-center w-full -mx-[14%] lg:mx-0">
@@ -160,7 +150,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                   width: 'auto',
                   maxHeight: '150px',
                   maxWidth: '100%',
-                  objectFit: 'contain'
+                  objectFit: 'contain',
                 }}
                 priority
               />
@@ -184,21 +174,31 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
             </div>
           </div>
           <div className="text-xl mt-7">
-            <p className='text-[rgb(255,191,73)] text-xs pb-[2px] font-semibold'>Earning Rate</p>
-            <p className='font-bold text-xl leading-none'>{earningsPerSecond.toFixed(2)} <span className='text-sm leading-none font-base'>$MAT/Sec</span></p>
+            <p className="text-[rgb(255,191,73)] text-xs pb-[2px] font-semibold">
+              Earning Rate
+            </p>
+            <p className="font-bold text-xl leading-none">
+              {earningsPerSecond.toFixed(2)} <span className="text-sm leading-none font-base">$MAT/Sec</span>
+            </p>
           </div>
         </div>
-        <div className='fixed max-h-[65vh] bottom-0 flex flex-col items-center'>
+        <div className="fixed max-h-[65vh] bottom-0 flex flex-col items-center w-full">
           <button
             onClick={handleStartMining}
             disabled={isMiningActive}
-            className="button lg:max-w-[200px] lg:-mt-0 relative -mb-5"
+            className="button lg:max-w-[200px] lg:-mt-0 relative -mb-5 w-full"
           >
             Claim Daily Matara
           </button>
-          <Image className='min-w-[100vw] flex  bottom-0 lg:max-w-[300px]' src={lion} alt="Main Character" width={100} height={100} />
+          <Image
+            className="min-w-[100vw] flex bottom-0 lg:max-w-[300px]"
+            src={lion}
+            alt="Main Character"
+            width={100}
+            height={100}
+          />
         </div>
       </div>
     </div>
-  )
+  );
 }

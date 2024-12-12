@@ -98,71 +98,71 @@ export default function Ranks() {
     <div>
       <TopSection />
       <div className="flex items-center justify-center pt-[5vh] h-full p-4 px-[15%]">
-      <div className='fixed flex items-center justify-between w-full px-[8%] top-60'>
-      <button
-          onClick={handlePrevious}
-          className=""
-          aria-label="Previous rank"
-        >
-          <Image src={chevronleft} width={50} height={50} alt='Previous' />
-        </button>
-        <button
-          onClick={handleNext}
-          className=""
-          aria-label="Next rank"
-        >
-          <Image src={chevronright} width={50} height={50} alt='Next' />
-        </button>
-      </div>
-      <div className="relative w-full max-w-sm flex flex-col items-center">
-        <AnimatePresence mode="wait">
-        <motion.div
-            key={currentIndex}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-col top-40 w-full fixed items-center space-y-1 p-8"
+        <div className='fixed flex items-center justify-between w-full px-[8%] top-60'>
+          <button
+            onClick={handlePrevious}
+            className=""
+            aria-label="Previous rank"
           >
+            <Image src={chevronleft} width={50} height={50} alt='Previous' />
+          </button>
+          <button
+            onClick={handleNext}
+            className=""
+            aria-label="Next rank"
+          >
+            <Image src={chevronright} width={50} height={50} alt='Next' />
+          </button>
+        </div>
+        <div className="relative w-full max-w-sm flex flex-col items-center">
+          <AnimatePresence mode="wait">
             <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
+              key={currentIndex}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
+              className="flex flex-col top-40 w-full fixed items-center space-y-1 p-8"
             >
-              <Image
-                src={ranks[currentIndex].image}
-                alt={`${ranks[currentIndex].name} rank badge`}
-                width={150}
-                height={150}
-                className="object-contain"
-              />
-            </motion.div>
-            
-            <motion.h2
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-[22.42px]  text-center font-[1000] pt-2 underline max-w-[80%] leading-[30px] underline-offset-[0.35em] decoration-skip-ink-none"
-              style={{
-                background: 'linear-gradient(92.78deg, #44F58E 12.41%, #FAFAFA 81.56%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}
-            >
-              {ranks[currentIndex].name}
-            </motion.h2>
-            
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="font-['Montserrat',_sans-serif] text-[20px] font-normal text-center underline underline-offset-[0.35em] decoration-skip-ink-none "
-              style={{
-                background: 'linear-gradient(360deg, #CDCBC8 0%, #88837B 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              {ranks[currentIndex].range}
-            </motion.p>
+              <motion.div
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Image
+                  src={ranks[currentIndex].image}
+                  alt={`${ranks[currentIndex].name} rank badge`}
+                  width={150}
+                  height={150}
+                  className="object-contain"
+                />
+              </motion.div>
+              
+              <motion.h2
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-[22.42px]  text-center font-[1000] pt-2 underline max-w-[80%] leading-[30px] underline-offset-[0.35em] decoration-skip-ink-none"
+                style={{
+                  background: 'linear-gradient(92.78deg, #44F58E 12.41%, #FAFAFA 81.56%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}
+              >
+                {ranks[currentIndex].name}
+              </motion.h2>
+              
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="font-['Montserrat',_sans-serif] text-[20px] font-normal text-center underline underline-offset-[0.35em] decoration-skip-ink-none "
+                style={{
+                  background: 'linear-gradient(360deg, #CDCBC8 0%, #88837B 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                {ranks[currentIndex].range}
+              </motion.p>
 
             </motion.div>
             <h1
@@ -176,9 +176,9 @@ export default function Ranks() {
             <div className='w-full flex-col flex items-center justify-center fixed bottom-16'>
                 <Image src={rankbtn} alt='' width={300} height={50} />
               </div>
-        </AnimatePresence>
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
     </div>
   )
 }
