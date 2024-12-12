@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Shield } from 'lucide-react'
+import { useGameStore } from '@/utils/game-mechaincs'
 
 interface CompletedTask {
   type: string
@@ -20,13 +21,14 @@ interface UserProfile {
 }
 
 export default function ProfilePage() {
+  const { userTelegramInitData } = useGameStore()
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await fetch('/api/profile')
+        const response = await fetch(`/api/profile?initData=${encodeURIComponent(userTelegramInitData)}`)
         if (!response.ok) throw new Error('Failed to fetch profile')
         const data = await response.json()
         setProfile(data)
@@ -37,8 +39,10 @@ export default function ProfilePage() {
       }
     }
 
-    fetchProfile()
-  }, [])
+    if (userTelegramInitData) {
+      fetchProfile()
+    }
+  }, [userTelegramInitData])
 
   if (isLoading || !profile) {
     return (

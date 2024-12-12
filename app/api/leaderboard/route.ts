@@ -1,27 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/utils/prisma';
-import { validateTelegramWebAppData } from '@/utils/server-checks';
 
-export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const telegramInitData = url.searchParams.get('initData');
-
-  if (!telegramInitData) {
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
-  }
-
-  const { validatedData, user } = validateTelegramWebAppData(telegramInitData);
-
-  if (!validatedData) {
-    return NextResponse.json({ error: 'Invalid Telegram data' }, { status: 403 });
-  }
-
-  const telegramId = user.id?.toString();
-
-  if (!telegramId) {
-    return NextResponse.json({ error: 'Invalid user data' }, { status: 400 });
-  }
-
+export async function GET() {
   try {
     const leaderboard = await prisma.user.findMany({
       select: {
@@ -34,23 +14,23 @@ export async function GET(req: Request) {
       take: 50,
     });
 
-    const formattedLeaderboard = leaderboard.map((entry, index) => ({
-      username: `User${entry.telegramId.slice(-4)}`,
-      rank: getRank(index + 1),
+    const getRankFromPoints = (points: number) => {
+      if (points >= 10000) return 'Sergeant';
+      if (points >= 1000) return 'Warrior';
+      if (points >= 500) return 'Scout';
+      return 'Cub Recruit';
+    };
+
+    const formattedLeaderboard = leaderboard.map(entry => ({
+      username: `${entry.telegramId.slice(-8)}`,
+      rank: getRankFromPoints(entry.pointsBalance),
       earnings: entry.pointsBalance,
     }));
 
-    return NextResponse.json(formattedLeaderboard, { status: 200 });
+    return NextResponse.json(formattedLeaderboard);
   } catch (error) {
     console.error('Error fetching leaderboard:', error);
     return NextResponse.json({ error: 'Failed to fetch leaderboard' }, { status: 500 });
   }
-}
-
-function getRank(position: number): string {
-  if (position === 1) return 'Gold';
-  if (position === 2) return 'Silver';
-  if (position === 3) return 'Bronze';
-  return 'Member';
 }
 

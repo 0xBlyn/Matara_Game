@@ -1,10 +1,17 @@
 'use client'
 
-import { useState } from 'react'
-import { CuboidIcon as IceCubes } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { CuboidIcon as IceCubes, ChevronDown } from 'lucide-react'
 import { calculateMineUpgradeCost, calculateProfitPerHour, useGameStore } from '@/utils/game-mechaincs'
 import TopInfoSection from '@/components/TopInfoSection'
 import { formatNumber, showErrorMessage, showSuccessMessage } from '@/utils/ui'
+import { useRouter } from 'next/navigation'
+
+interface LeaderboardEntry {
+  username: string
+  rank: string
+  earnings: number
+}
 
 export default function Mine() {
   const {
@@ -15,9 +22,29 @@ export default function Mine() {
     upgradeMineLevelIndex
   } = useGameStore()
   const [isLoading, setIsLoading] = useState(false)
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([])
+  const [isLeaderboardLoading, setIsLeaderboardLoading] = useState(true)
+  const router = useRouter()
 
   const upgradeCost = calculateMineUpgradeCost(mineLevelIndex)
   const upgradeIncrease = calculateProfitPerHour(mineLevelIndex + 1) - calculateProfitPerHour(mineLevelIndex)
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const response = await fetch('/api/leaderboard')
+        if (!response.ok) throw new Error('Failed to fetch leaderboard')
+        const data = await response.json()
+        setLeaderboardData(data)
+      } catch (error) {
+        console.error('Error:', error)
+      } finally {
+        setIsLeaderboardLoading(false)
+      }
+    }
+
+    fetchLeaderboard()
+  }, [])
 
   const handleUpgrade = async () => {
     if (pointsBalance >= upgradeCost && !isLoading) {
@@ -56,49 +83,46 @@ export default function Mine() {
 
         <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative">
           <div className="absolute inset-0 top-[2px] bg-[#1d2025] rounded-t-[46px] px-4 py-6">
-            <h1 className="text-2xl text-center mb-6">Upgrade Ice Production</h1>
-
-            <div className="px-4 mt-4 flex justify-center">
-              <div className="px-4 py-2 flex items-center space-x-2">
-                <IceCubes className="w-12 h-12 text-[#f3ba2f]" />
-                <p className="text-4xl text-white" suppressHydrationWarning>
-                  {pointsBalance.toLocaleString()}
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-[#272a2f] rounded-lg p-4 mt-6">
-              <div className="flex justify-between items-center mb-4">
-                <p>Current ice per hour:</p>
-                <p className="text-[#f3ba2f]">{formatNumber(profitPerHour)}</p>
-              </div>
-              <div className="flex justify-between items-center mb-4">
-                <p>Upgrade cost:</p>
-                <p className="text-[#f3ba2f]">{formatNumber(upgradeCost)}</p>
-              </div>
-              <div className="flex justify-between items-center">
-                <p>Ice per hour increase:</p>
-                <p className="text-[#f3ba2f]">+{formatNumber(upgradeIncrease)}</p>
-              </div>
-            </div>
+            <h1 className="text-4xl font-bold text-center text-[#ffd700] mb-4">Ranking</h1>
+            <p className="text-center text-gray-400 mb-6 leading-relaxed text-sm">
+              Strive to be among Top100,000 members<br />
+              to be eligible for Matara Community<br />
+              Airdrop.
+            </p>
 
             <button
-              onClick={handleUpgrade}
-              disabled={pointsBalance < upgradeCost || isLoading}
-              className={`w-full mt-6 py-3 rounded-lg text-center text-white font-bold ${
-                pointsBalance >= upgradeCost && !isLoading
-                  ? 'bg-[#f3ba2f] hover:bg-[#f3ba2f]/90'
-                  : 'bg-gray-500 cursor-not-allowed'
-              }`}
+              onClick={() => router.push('/ranks')}
+              className="w-full bg-[#1a2028] border border-[#00ff9d] rounded-lg p-3 mb-8 flex items-center justify-center gap-2 text-[#00ff9d] hover:bg-[#1a2028]/80 transition-all duration-300"
             >
-              {isLoading ? (
-                <div className="flex justify-center items-center">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" />
-                </div>
-              ) : (
-                'Upgrade'
-              )}
+              See all Ranks
+              <span className="flex gap-1">👑🎮</span>
+              <ChevronDown className="w-4 h-4" />
             </button>
+
+            <div className="grid grid-cols-3 text-sm text-gray-400 mb-4 px-4 border-b border-gray-800 pb-2">
+              <div>User Name</div>
+              <div>Rank</div>
+              <div className="text-right">Earnings</div>
+            </div>
+
+            {isLeaderboardLoading ? (
+              <div className="flex justify-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00ff9d]" />
+              </div>
+            ) : (
+              <div className="space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar pr-2">
+                {leaderboardData.map((entry, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-3 items-center px-4 py-3"
+                  >
+                    <div className="text-gray-300">@{entry.username}</div>
+                    <div className="text-[#00ff9d]">{entry.rank}</div>
+                    <div className="text-right text-[#00ff9d]">{entry.earnings.toLocaleString()} $MAT</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
