@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import Image from 'next/image'
 import { useGameStore } from '@/utils/game-mechaincs'
@@ -17,7 +15,6 @@ interface GameProps {
   setCurrentView: (newView: string) => void
 }
 
-// Add rank calculations
 const RANKS = [
   { name: "Novice Miner", threshold: 0 },
   { name: "Bronze Miner", threshold: 1000 },
@@ -41,14 +38,11 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   const [arrowDirection, setArrowDirection] = useState('down')
   const [isSlashing, setIsSlashing] = useState(false)
   const [playSound] = useSound('/arrow-change.mp3')
+  const [currentRank, setCurrentRank] = useState(RANKS[0])
 
-  const miningDuration = 12 * 60 * 60 * 1000 // 12 hours in milliseconds
-  const slashingRate = 0.00001 // Points lost per second during slashing mode
+  const miningDuration = 12 * 60 * 60 * 1000
+  const slashingRate = 0.00001
 
-  // Add new state for rank
-  const [currentRank, setCurrentRank] = useState(RANKS[0]);
-
-  // Sync with backend every 30 seconds
   useEffect(() => {
     const syncInterval = setInterval(async () => {
       try {
@@ -58,7 +52,6 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
           body: JSON.stringify({ points, miningStartTime, isMiningActive })
         });
         const data = await response.json();
-        // Update local state with server data
         if (data.points) incrementPoints(data.points - points);
       } catch (error) {
         console.error('Sync error:', error);
@@ -68,7 +61,6 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
     return () => clearInterval(syncInterval);
   }, [points, miningStartTime, isMiningActive]);
 
-  // Update rank based on points
   useEffect(() => {
     const newRank = RANKS.reduce((acc, rank) => {
       if (points >= rank.threshold) return rank;
@@ -114,11 +106,9 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
 
   useEffect(() => {
     let timer: NodeJS.Timeout
-    
     try {
       timer = setInterval(() => {
         setTimeLeft(calculateTimeLeft())
-        
         if (isSlashing) {
           incrementPoints(-slashingRate)
         } else if (isMiningActive) {
@@ -131,7 +121,6 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
     } catch (error) {
       console.error('Error in mining calculation:', error)
     }
-
     return () => {
       if (timer) clearInterval(timer)
     }
@@ -146,8 +135,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
     <div className="fixed w-full h-screen flex flex-col items-center justify-between">
       <div className="w-full flex-1 flex flex-col items-center pt-20">
         <TopInfoSection />
-        
-        <div className="flex items-center fixed top-[15vh] justify-center my-[3%] w-full px-[10%] lg:max-w-[300px]">
+        <div className="flex items-center justify-center my-[3%] w-full px-[10%] lg:max-w-[300px]">
           <div className="text-2xl font-bold text-right mt-7">
             <p className='text-[#4BF693] text-xs font-semibold'>Mining Mode</p>
             <p
@@ -163,13 +151,19 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
           </div>
           <div className="relative flex items-center justify-center w-full -mx-[14%] lg:mx-0">
             <div className="fixed justify-center">
-            <Image
-              className={`${isMiningActive ? '' : 'grayscale'}`}
-              src={isSlashing ? hourglassBW : hourglass}
-              alt="Hourglass"
-              style={{ height: '25vh', width: 'auto' }}
-              priority
-            />
+              <Image
+                className={`${isMiningActive ? '' : 'grayscale'}`}
+                src={isSlashing ? hourglassBW : hourglass}
+                alt="Hourglass"
+                style={{
+                  height: '25vh',
+                  width: 'auto',
+                  maxHeight: '150px',
+                  maxWidth: '100%',
+                  objectFit: 'contain'
+                }}
+                priority
+              />
               <AnimatePresence>
                 <motion.div
                   key={arrowDirection}
@@ -194,19 +188,17 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
             <p className='font-bold text-xl leading-none'>{earningsPerSecond.toFixed(2)} <span className='text-sm leading-none font-base'>$MAT/Sec</span></p>
           </div>
         </div>
-        
         <div className='fixed max-h-[65vh] bottom-0 flex flex-col items-center'>
-      <button
-        onClick={handleStartMining}
-        disabled={isMiningActive}
-        className="button lg:max-w-[200px] lg:-mt-0 relative -mb-5"
-      >
-        Claim Daily Matara
-      </button>
-        <Image className='min-w-[100vw] flex  bottom-0 lg:max-w-[300px]' src={lion} alt="Main Character" width={100} height={100} />
-      </div>
+          <button
+            onClick={handleStartMining}
+            disabled={isMiningActive}
+            className="button lg:max-w-[200px] lg:-mt-0 relative -mb-5"
+          >
+            Claim Daily Matara
+          </button>
+          <Image className='min-w-[100vw] flex  bottom-0 lg:max-w-[300px]' src={lion} alt="Main Character" width={100} height={100} />
+        </div>
       </div>
     </div>
   )
 }
-
