@@ -46,6 +46,8 @@ export interface InitialGameState {
 }
 
 export interface GameState extends InitialGameState {
+  userTelegramInitData: string;
+  setUserTelegramInitData: (data: string) => void;
 
   initializeState: (initialState: Partial<GameState>) => void;
 
@@ -123,6 +125,8 @@ export const calculateRestoredEnergy = (multitapLevelIndex: number, previousTime
 export const createGameStore = (initialState: InitialGameState) => create<GameState>((set) => ({
   ...initialState,
 
+  setUserTelegramInitData: (data: string) => set({ userTelegramInitData: data }),
+  
   initializeState: (initialState) => set((state) => ({ ...state, ...initialState })),
   updateLastClickTimestamp: () => set((state) => {
     // console.log("updateLastClickTimestamp", state.lastClickTimestamp);
