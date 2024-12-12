@@ -38,7 +38,6 @@ model Task {
   tokens            Int
   type              String
   category          String
-  image             String
   callToAction      String
   link              String
   taskStartTimestamp DateTime?

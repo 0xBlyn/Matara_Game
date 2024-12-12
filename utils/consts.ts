@@ -30,7 +30,6 @@ export interface TaskData {
   description: string;
   tokens: number;
   type: string;
-  image: string;
   callToAction: string;
   link: string;
   taskStartTimestamp: Date | null;
@@ -46,7 +45,6 @@ export const earnData = [
         description: "Report a specific X post to help maintain community standards",
         tokens: 25,
         type: "twitter",
-        // image: "twitter",
         callToAction: "Perform Task",
         link: "https://twitter.com/example_post_1",
         taskStartTimestamp: null
@@ -57,12 +55,10 @@ export const earnData = [
         description: "Share our content on your TikTok account",
         tokens: 50,
         type: "tiktok",
-        // image: "tiktok",
         callToAction: "Perform Task",
         link: "https://tiktok.com/share",
         taskStartTimestamp: null
       }
-      // ... other tasks
     ]
   }
 ];

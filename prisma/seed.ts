@@ -14,7 +14,6 @@ async function main() {
           tokens: task.tokens,
           type: task.type,
           category: category.category,
-          image: task.image,
           callToAction: task.callToAction,
           link: task.link,
           taskStartTimestamp: task.taskStartTimestamp,
