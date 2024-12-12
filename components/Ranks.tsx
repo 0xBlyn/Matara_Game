@@ -100,18 +100,18 @@ export default function Ranks() {
       <div className="flex items-center justify-center pt-[5vh] h-full p-4 px-[15%]">
       <div className='fixed flex items-center justify-between w-full px-[8%] top-60'>
       <button
-          onClick={handleNext}
-          className=""
-          aria-label="Next rank"
-        >
-          <Image src={chevronright} width={50} height={50} alt='' />
-        </button>
-        <button
           onClick={handlePrevious}
           className=""
           aria-label="Previous rank"
         >
-          <Image src={chevronleft} width={50} height={50} alt='' />
+          <Image src={chevronleft} width={50} height={50} alt='Previous' />
+        </button>
+        <button
+          onClick={handleNext}
+          className=""
+          aria-label="Next rank"
+        >
+          <Image src={chevronright} width={50} height={50} alt='Next' />
         </button>
       </div>
       <div className="relative w-full max-w-sm flex flex-col items-center">

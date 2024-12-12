@@ -25,9 +25,16 @@ export default function ProfilePage() {
   const { userTelegramInitData } = useGameStore();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
+      if (!userTelegramInitData) {
+        setError('No Telegram data available');
+        setIsLoading(false);
+        return;
+      }
+
       try {
         console.log('Fetching profile with initData:', userTelegramInitData);
         const response = await fetch(`/api/profile?initData=${encodeURIComponent(userTelegramInitData)}`);
@@ -43,28 +50,35 @@ export default function ProfilePage() {
         setProfile(data);
       } catch (error) {
         console.error('Error:', error);
+        setError(error instanceof Error ? error.message : 'Failed to load profile');
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (userTelegramInitData) {
-      fetchProfile();
-    } else {
-      console.log('No userTelegramInitData available');
-      setIsLoading(false);
-    }
+    fetchProfile();
   }, [userTelegramInitData]);
 
-  if (isLoading || !profile) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[3.61px solid linear-gradient(92.78deg, #44F58E 12.41%, #02354C 81.56%)]" />
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#00ff9d]" />
       </div>
     );
   }
 
-  const hasCompletedTasks = profile.completedTasks && profile.completedTasks.length > 0;
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-red-500 text-center">
+          <p>Error: {error}</p>
+          <p className="text-sm text-gray-400 mt-2">Please try refreshing the page</p>
+        </div>
+      </div>
+    );
+  }
+
+  const hasCompletedTasks = profile!.completedTasks && profile!.completedTasks.length > 0;
 
   return (
     <div className="min-h-screen text-white p-4">
@@ -73,19 +87,19 @@ export default function ProfilePage() {
         <div className="flex items-center mb-8">
           <div className="mr-4">
             <Image
-              src={profile.photoUrl}
-              alt={profile.displayName}
+              src={profile!.photoUrl}
+              alt={profile!.displayName}
               width={64}
               height={64}
               className="rounded-full object-cover border-2 border-[#00ff9d]"
             />
           </div>
           <div>
-            <h1 className="text-[#00ff9d] text-3xl font-bold mb-1">{profile.displayName}</h1>
-            <span>@{profile.username}</span>
+            <h1 className="text-[#00ff9d] text-3xl font-bold mb-1">{profile!.displayName}</h1>
+            <span>@{profile!.username}</span>
             <div className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-[#00ff9d]" />
-              <span className="text-white font-bold">{profile.rank}</span>
+              <span className="text-white font-bold">{profile!.rank}</span>
             </div>
           </div>
         </div>
@@ -101,7 +115,7 @@ export default function ProfilePage() {
           </div>
           {hasCompletedTasks ? (
             <div className="space-y-4">
-              {profile.completedTasks.map((task, index) => (
+              {profile!.completedTasks.map((task, index) => (
                 <div
                   key={index}
                   className="grid grid-cols-2 items-center px-4 py-3 rounded-lg transition-colors duration-200 hover:bg-white/5"
