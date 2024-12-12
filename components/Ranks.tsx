@@ -180,6 +180,5 @@ export default function Ranks() {
       </div>
     </div>
     </div>
-
   )
 }
