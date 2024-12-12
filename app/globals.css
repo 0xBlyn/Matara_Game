@@ -644,3 +644,13 @@ body{
   top: 0; /* Align to the top */
   left: 0; /* Align to the left */
 }
+.grayscale {
+  filter: grayscale(100%);
+}
+
+.relative-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh; /* Adjustable container height */
+}

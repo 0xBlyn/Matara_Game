@@ -145,9 +145,9 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   return (
     <div className="fixed w-full h-screen flex flex-col items-center justify-between">
       <div className="w-full flex-1 flex flex-col items-center pt-20">
-        <TopInfoSection rank={currentRank.name} />
+        <TopInfoSection />
         
-        <div className="flex items-center justify-center w-full px-[10%] mt-16 lg:max-w-[300px]">
+        <div className="flex items-center justify-center my-[3%] w-full px-[10%] mt-15 lg:max-w-[300px]">
           <div className="text-2xl font-bold text-right mt-7">
             <p className='text-[#4BF693] text-xs font-semibold'>Mining Mode</p>
             <p
@@ -161,15 +161,15 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
               {points.toFixed(3)} <span className='text-semibold'>$MAT</span>
             </p>
           </div>
-          <div className="relative flex items-center justify-center w-full lg:mx-0 -mx-[8%]">
+          <div className="relative flex items-center justify-center w-full lg:mx-0">
             <div className="relative justify-center">
-              <Image 
-                className='sm:w-[120px]' 
-                src={isSlashing ? hourglassBW : hourglass} 
-                alt="Hourglass" 
-                width={80} 
-                height={80} 
-              />
+            <Image
+              className={`${isMiningActive ? '' : 'grayscale'}`}
+              src={isSlashing ? hourglassBW : hourglass}
+              alt="Hourglass"
+              style={{ height: '25vh', width: 'auto' }}
+              priority
+            />
               <AnimatePresence>
                 <motion.div
                   key={arrowDirection}
@@ -177,13 +177,13 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: arrowDirection === 'up' ? -20 : 20 }}
                   transition={{ duration: 0.3 }}
-                  className="absolute top-0 mt-6 left-0 transform translate-x-1/2 translate-y-1/2 z-10"
+                  className="absolute top-9 mt-6 left-7 transform translate-x-1/2 translate-y-1/2 z-10"
                 >
                   <Image
                     src={isMiningActive ? activeArrow : inactiveArrow}
                     alt="Mining Status Arrow"
-                    width={40}
-                    height={40}
+                    width={60}
+                    height={60}
                   />
                 </motion.div>
               </AnimatePresence>
@@ -191,11 +191,11 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
           </div>
           <div className="text-xl mt-7">
             <p className='text-[#FFBF49] text-xs font-semibold'>Earning Rate</p>
-            <p className='font-semibold text-2xl leading-none'>{earningsPerSecond.toFixed(4)} <span className='text-lg leading-none font-base'>points/Sec</span></p>
+            <p className='font-semibold text-2xl leading-none'>{earningsPerSecond.toFixed(4)} <span className='text-sm leading-none font-base'>points/Sec</span></p>
           </div>
         </div>
         
-        <div className="relative w-full flex flex-col items-center mt-auto">
+        <div className="relative w-full flex flex-col items-center">
           <button
             onClick={handleStartMining}
             disabled={isMiningActive}

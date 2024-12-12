@@ -98,7 +98,7 @@ export default function Ranks() {
     <div>
       <TopSection />
       <div className="flex items-center justify-center pt-[5vh] h-full p-4 px-[15%]">
-      <div className='fixed z-[99] flex items-center justify-between w-full px-[8%] top-60'>
+      <div className='fixed flex items-center justify-between w-full px-[8%] top-60'>
       <button
           onClick={handleNext}
           className=""

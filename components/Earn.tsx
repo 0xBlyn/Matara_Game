@@ -83,7 +83,7 @@ export default function Earn() {
 
   return (
     <div>
-      <TopInfoSection rank={''} />
+      <TopInfoSection />
       <div className="flex fixed top-20 flex-col justify-center">
       <ToastContainer />
       <div className='flex flex-col items-center w-full pt-7'>
