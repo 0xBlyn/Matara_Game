@@ -54,6 +54,11 @@ function ClickerPage() {
 
     console.log('ClickerPage rendering. Current state:', { currentView, isInitialized });
 
+    useEffect(() => {
+        console.log('Telegram WebApp:', window?.Telegram?.WebApp);
+        console.log('Init Data:', window?.Telegram?.WebApp?.initData);
+    }, []);
+
     return (
         <div className="bg-black min-h-screen text-white">
             <ToastContainer />

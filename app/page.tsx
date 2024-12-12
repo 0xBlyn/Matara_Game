@@ -5,6 +5,7 @@ import mainCharacter from '@/images/main-character.png';
 import Link from 'next/link';
 import ClaimButton from './ui/claim-button';
 import { useEffect, useState } from 'react';
+import TelegramAuth from '@/components/telegramAuth'
 
 const TypewriterText = ({ text }: { text: string }) => {
   const [displayText, setDisplayText] = useState('');
@@ -31,25 +32,28 @@ const TypewriterText = ({ text }: { text: string }) => {
 
 export default function Home() {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-full max-w-xl text-white flex flex-col items-center">
-        <div className="w-64 h-64 rounded-full circle-outer p-2 mb-8">
-          <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
-            <Image
-              src={mainCharacter}
-              alt="Main Character"
-              fill
-              style={{
-                objectFit: 'cover',
-                objectPosition: 'center',
-                transform: 'scale(1.25) translateY(10%)'
-              }}
-            />
+    <main>
+      <TelegramAuth />
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-full max-w-xl text-white flex flex-col items-center">
+          <div className="w-64 h-64 rounded-full circle-outer p-2 mb-8">
+            <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
+              <Image
+                src={mainCharacter}
+                alt="Main Character"
+                fill
+                style={{
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                  transform: 'scale(1.25) translateY(10%)'
+                }}
+              />
+            </div>
           </div>
+          <TypewriterText text="Welcome to Matara" />
+          <Link href="/clicker" className="underline"><ClaimButton content="Get Started" /></Link>
         </div>
-        <TypewriterText text="Welcome to Matara" />
-        <Link href="/clicker" className="underline"><ClaimButton content="Get Started" /></Link>
       </div>
-    </div>
+    </main>
   );
 }
