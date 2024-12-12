@@ -1,20 +1,33 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { getSession, updateSession } from './utils/session'
+import { getSession } from './utils/session'
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith('/protected')) {
-    const session = await getSession()
-    console.log("Session: ", session)
-
-    if (!session) {
-      return NextResponse.redirect(new URL('/', request.url))
+    // Allow API routes
+    if (request.nextUrl.pathname.startsWith('/api')) {
+        return NextResponse.next()
     }
-  }
 
-  return updateSession(request)
+    // Check for bypass in development
+    if (process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH === 'true') {
+        return NextResponse.next()
+    }
+
+    try {
+        const session = await getSession()
+        
+        // If no session and not on home page, redirect to home
+        if (!session && request.nextUrl.pathname !== '/') {
+            return NextResponse.redirect(new URL('/', request.url))
+        }
+        
+        return NextResponse.next()
+    } catch (error) {
+        console.error('Middleware error:', error)
+        return NextResponse.redirect(new URL('/', request.url))
+    }
 }
 
 export const config = {
-  matcher: ['/protected/:path*', '/api/:path*'],
+    matcher: ['/((?!_next/static|favicon.ico).*)'],
 }

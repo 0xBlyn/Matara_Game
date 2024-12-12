@@ -2,16 +2,28 @@ import { jwtVerify, SignJWT } from 'jose'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
-const key = new TextEncoder().encode(process.env.JWT_SECRET)
+const getKey = () => {
+    const secret = process.env.JWT_SECRET
+    if (!secret || secret.length === 0) {
+        throw new Error('JWT_SECRET is not set or is empty')
+    }
+    return new TextEncoder().encode(secret)
+}
 
 export const SESSION_DURATION = 60 * 60 * 1000 // 1 hour
 
 export async function encrypt(payload: any) {
-    return await new SignJWT(payload)
-        .setProtectedHeader({ alg: "HS256" })
-        .setIssuedAt()
-        .setExpirationTime("1 hour")
-        .sign(key)
+    try {
+        const key = getKey()
+        return await new SignJWT(payload)
+            .setProtectedHeader({ alg: "HS256" })
+            .setIssuedAt()
+            .setExpirationTime("1h")
+            .sign(key)
+    } catch (error) {
+        console.error('Encryption error:', error)
+        throw error
+    }
 }
 
 export async function decrypt(input: string): Promise<any> {
