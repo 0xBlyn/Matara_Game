@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image';
-import { mainCharacter } from '@/images';
+import mainCharacter from '@/images/main-character.png';
 import Link from 'next/link';
 import ClaimButton from './ui/claim-button';
 import { useEffect, useState } from 'react';
