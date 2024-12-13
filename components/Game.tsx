@@ -8,6 +8,10 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useSound } from 'use-sound'
 import { formatNumber } from '@/utils/ui'
 import { calculateMiningRateByRank } from '@/utils/game-mechaincs'
+import hourglass from '@/images/Group 111 (1).png';
+import activeArrow from '@/images/active.png';
+import inactiveArrow from '@/images/inactive.png';
+import lion from '@/images/Group 113 (3).png';
 
 interface GameProps {
   currentView: string
@@ -173,7 +177,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
           </div>
           <div className="relative flex items-center justify-center w-full lg:mx-0 -mx-[8%]">
             <div className="relative justify-center">
-              <Image className='sm:w-[120px]' src="/hourglass.png" alt="Hourglass" width={80} height={80} />
+              <Image className='sm:w-[120px]' src={hourglass} alt="Hourglass" width={80} height={80} />
               <AnimatePresence mode="wait">
                 <motion.div
                   key={arrowDirection}
@@ -184,7 +188,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                   className="absolute sm:w-[60px] top-0 mt-6 left-0 transform translate-x-1/2 translate-y-1/2 z-10"
                 >
                   <Image
-                    src={`/arrow-${isMiningActive ? 'active' : 'inactive'}.png`}
+                    src={isMiningActive ? activeArrow : inactiveArrow}
                     alt="Mining Status Arrow"
                     width={40}
                     height={40}
@@ -216,7 +220,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
           >
             {isMiningActive ? `Mining in Progress (${timeLeft})` : 'Claim Daily Matara'}
           </button>
-          <Image className='min-w-[100vw] flex bottom-0 lg:max-w-[300px]' src="/lion.png" alt="Main Character" width={100} height={100} />
+          <Image className='min-w-[100vw] flex bottom-0 lg:max-w-[300px]' src={lion} alt="Main Character" width={100} height={100} />
         </div>
       </div>
     </div>
