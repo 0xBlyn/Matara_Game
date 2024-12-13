@@ -15,14 +15,20 @@ export async function GET() {
     });
 
     const getRankFromPoints = (points: number) => {
-      if (points >= 10000) return 'Sergeant';
-      if (points >= 1000) return 'Warrior';
-      if (points >= 500) return 'Scout';
+      if (points >= 100000000) return 'Champion of Matara';
+      if (points >= 30000000) return 'Field Marshal';
+      if (points >= 10000000) return 'General';
+      if (points >= 5000000) return 'Commander';
+      if (points >= 2500000) return 'Lieutenant';
+      if (points >= 1000000) return 'Captain';
+      if (points >= 100000) return 'Sergeant';
+      if (points >= 25000) return 'Warrior';
+      if (points >= 5000) return 'Scout';
       return 'Cub Recruit';
     };
 
     const formattedLeaderboard = leaderboard.map(entry => ({
-      username: `${entry.telegramId.slice(-8)}`,
+      username: entry.telegramId.slice(-8),
       rank: getRankFromPoints(entry.pointsBalance),
       earnings: entry.pointsBalance,
     }));

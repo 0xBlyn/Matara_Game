@@ -80,7 +80,7 @@ export async function POST(req: Request) {
           }
 
           const minedPoints = calculateMinedPoints(
-            dbUser.mineLevelIndex,
+            dbUser.points,
             dbUser.lastPointsUpdateTimestamp.getTime(),
             serverTimestamp
           );

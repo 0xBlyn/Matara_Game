@@ -7,6 +7,7 @@ import Link from "next/link"
 import { Menu } from "@/components/Menu"
 import badge from '@/images/+Layer 1.png'
 import dehaze from '@/images/Frame 2191.png'
+import { formatNumber } from '@/utils/ui'
 
 
 export default function TopInfoSection() {
@@ -20,8 +21,8 @@ export default function TopInfoSection() {
           <Link href='/clicker'>
             <Image src={badge} width={40} height={40} alt='Badge' />
           </Link>
-          <div className="balance ml-[5%] text-white font-bold">
-            {points.toFixed(3)}<span className="ml-1 text-gray-400">$MAT</span>
+          <div className="balance ml-[5%]">
+            {formatNumber(points)}<span className="ml-1">$MAT</span>
           </div>
         </div>
         <div className="flex items-center">

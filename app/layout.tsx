@@ -30,8 +30,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gradient-to-b from-[#0a0e12] to-[#1a1f24]">
-        <div className="responsive-container min-h-screen">
+      <body className="min-h-screen">
+        <div className="fixed-background" />
+        <div className="relative min-h-screen">
           {children}
         </div>
       </body>

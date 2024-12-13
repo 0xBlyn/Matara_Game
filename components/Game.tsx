@@ -9,6 +9,8 @@ import hourglass from '@/images/image 27 (1).png';
 import hourglassBW from '@/images/image 27.png';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSound } from 'use-sound';
+import { formatNumber } from '@/utils/ui';
+import { calculateMiningRateByRank } from '@/utils/game-mechaincs';
 
 interface GameProps {
   currentView: string;
@@ -102,9 +104,9 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
         if (isSlashing) {
           incrementPoints(-slashingRate);
         } else if (isMiningActive) {
-          const increase = profitPerHour / 3600;
-          if (!isNaN(increase)) {
-            incrementPoints(increase);
+          const miningRate = calculateMiningRateByRank(points);
+          if (!isNaN(miningRate)) {
+            incrementPoints(miningRate);
           }
         }
       }, 1000);
@@ -114,12 +116,11 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [isMiningActive, isSlashing, calculateTimeLeft, incrementPoints, profitPerHour]);
+  }, [isMiningActive, isSlashing, calculateTimeLeft, incrementPoints, points]);
 
   const earningsPerSecond = useMemo(() => {
-    const earnings = profitPerHour / 3600;
-    return isNaN(earnings) ? 0 : earnings;
-  }, [profitPerHour]);
+    return calculateMiningRateByRank(points);
+  }, [points]);
 
   return (
     <div className="flex flex-col items-center justify-between h-screen">
@@ -136,7 +137,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                 backgroundClip: 'text',
               }}
             >
-              {points.toFixed(2)} <span className="text-semibold">$MAT</span>
+              {formatNumber(points)} <span className="text-semibold">$MAT</span>
             </p>
           </div>
           <div className="relative flex items-center justify-center w-full -mx-[14%] lg:mx-0">
@@ -178,7 +179,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
               Earning Rate
             </p>
             <p className="font-bold text-xl leading-none">
-              {earningsPerSecond.toFixed(2)} <span className="text-sm leading-none font-base">$MAT/Sec</span>
+              {formatNumber(earningsPerSecond)} <span className="text-sm leading-none font-base">$MAT/Sec</span>
             </p>
           </div>
         </div>

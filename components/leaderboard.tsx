@@ -40,7 +40,7 @@ export default function Leaderboard() {
     <div className="w-full max-w-xl mx-auto bg-[#0a0e12] text-white p-4">
       <h1 className="text-4xl font-bold text-center text-[#f3ba2f] mb-2">Ranking</h1>
       <p className="text-center text-sm text-gray-400 mb-4">
-        Strive to be among Top100,000 members<br />
+        Strive to be among Top 100,000 members<br />
         to be eligible for Matara Community<br />
         Airdrop.
       </p>

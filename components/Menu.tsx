@@ -18,7 +18,7 @@ export function Menu({ isOpen, onClose }: MenuProps) {
 
   return (
     <div 
-      className="fixed inset-0 bg-black/50 z-[999999]"
+      className="fixed inset-0 bg-[#000F15]/50 backdrop-blur-sm z-[999999]"
       onClick={onClose}
     >
       <div 

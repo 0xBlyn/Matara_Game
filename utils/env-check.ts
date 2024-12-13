@@ -1,4 +1,9 @@
 export function checkEnvironment() {
+  // Skip checks in development
+  if (process.env.NODE_ENV === 'development') {
+    return;
+  }
+
   const required = [
     'DATABASE_URL',
     'TELEGRAM_BOT_TOKEN',

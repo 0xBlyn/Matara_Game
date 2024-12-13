@@ -41,9 +41,9 @@ export default function Home() {
   return (
     <main>
       <div className="flex justify-center items-center h-screen">
-        <div className="w-full max-w-xl text-white flex flex-col items-center">
+        <div className="w-full text-white flex flex-col items-center">
           <div className="w-64 h-64 rounded-full circle-outer p-2 mb-5">
-            <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
+            <div className="w-full h-full font-['Gill Sans',_sans-serif] rounded-full circle-inner overflow-hidden relative">
               <Image
                 src={mainCharacter}
                 alt="Main Character"
@@ -56,7 +56,7 @@ export default function Home() {
               />
             </div>
           </div>
-          <TypewriterText text="Welcome to Matara" />
+          <TypewriterText  text="Welcome to Matara" />
          <TelegramAuth />
         </div>
       </div>

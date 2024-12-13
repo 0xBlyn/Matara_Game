@@ -5,16 +5,16 @@ import { calculateUpgradeBenefit, calculateUpgradeCost } from './calculations';
 import { energyUpgradeBaseBenefit, energyUpgradeBasePrice, energyUpgradeBenefitCoefficient, energyUpgradeCostCoefficient, mineUpgradeBaseBenefit, mineUpgradeBasePrice, mineUpgradeBenefitCoefficient, mineUpgradeCostCoefficient, multitapUpgradeBaseBenefit, multitapUpgradeBasePrice, multitapUpgradeBenefitCoefficient, multitapUpgradeCostCoefficient } from './consts';
 
 export const levelNames = [
-  "Ice Cube Intern",
-  "Frosty Freelancer",
-  "Chilly Consultant",
-  "Glacial Manager",
-  "Subzero Supervisor",
-  "Arctic Executive",
-  "Polar CEO",
-  "Tundra Tycoon",
-  "Iceberg Mogul",
-  "Cryogenic Crypto King"
+  "Cub Recruit",
+  "Scout",
+  "Warrior",
+  "Sergeant",
+  "Captain",
+  "alieutenant",
+  "Commander",
+  "General",
+  "Field Marshal",
+  "Champion of Matara"
 ];
 
 export const levelMinPoints = [
@@ -121,6 +121,27 @@ export const calculateRestoredEnergy = (multitapLevelIndex: number, previousTime
   return restoredEnergy;
 }
 
+export const RANK_MINING_RATES = [
+  { name: "Cub Recruit", threshold: 0, ratePerSecond: 0.002 },
+  { name: "Scout", threshold: 5000, ratePerSecond: 0.004 },
+  { name: "Warrior", threshold: 25000, ratePerSecond: 0.006 },
+  { name: "Sergeant", threshold: 100000, ratePerSecond: 0.008 },
+  { name: "Captain", threshold: 1000000, ratePerSecond: 0.010 },
+  { name: "Lieutenant", threshold: 2500000, ratePerSecond: 0.012 },
+  { name: "Commander", threshold: 5000000, ratePerSecond: 0.014 },
+  { name: "General", threshold: 10000000, ratePerSecond: 0.016 },
+  { name: "Field Marshal", threshold: 30000000, ratePerSecond: 0.018 },
+  { name: "Champion of Matara", threshold: 100000000, ratePerSecond: 0.020 }
+];
+
+export const calculateMiningRateByRank = (points: number): number => {
+  const rank = RANK_MINING_RATES.reduce((acc, rank) => {
+    if (points >= rank.threshold) return rank;
+    return acc;
+  }, RANK_MINING_RATES[0]);
+  
+  return rank.ratePerSecond;
+};
 
 export const createGameStore = (initialState: InitialGameState) => create<GameState>((set) => ({
   ...initialState,

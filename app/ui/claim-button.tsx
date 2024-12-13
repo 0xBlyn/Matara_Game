@@ -23,7 +23,7 @@ const ClaimButton: React.FC<ClaimButtonProps> = ({ onClick, className = '', cont
         text-black
         text-2xl
         font-black
-        font-['Impact']
+        font-['Gill Sans',_sans-serif] 
         tracking-wide
         shadow-[0_4px_15px_rgba(255,195,105,0.25)]
         transition-transform

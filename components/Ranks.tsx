@@ -167,7 +167,7 @@ export default function Ranks() {
             </motion.div>
             <h1
       className="
-        fixed bottom-32 w-full
+        fixed bottom-24 w-full
         font-['Montserrat',_sans-serif] text-[16px] font-normal text-center
         underline underline-offset-[0.35em] decoration-skip-ink-none pb-3 z-10
         bg-gradient-to-t from-[#CDCBC8] to-[#88837B] text-transparent bg-clip-text

@@ -110,7 +110,7 @@ export default function Mine() {
                   >
                     <div className="text-gray-300">@{entry.username}</div>
                     <div className="text-gray-300">{entry.rank}</div>
-                    <div className="text-right text-[#44F58E]">{entry.earnings.toLocaleString()} $MAT</div>
+                    <div className="text-right text-[#44F58E]">{formatNumber(entry.earnings)} $MAT</div>
                   </div>
                 ))}
               </div>
