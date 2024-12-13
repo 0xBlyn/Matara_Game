@@ -30,9 +30,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body  className={`${inter.className} ${gillSans.variable} fixed-background`}>
-        <div className="fixed-background" />
-        <div className="relative min-h-screen">
+      <body  className={`${inter.className} ${gillSans.variable}`}>
+        <div />
+        <div className="relative max-h-screen">
           {children}
         </div>
       </body>
