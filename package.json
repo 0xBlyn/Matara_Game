@@ -16,6 +16,7 @@
     "@prisma/extension-accelerate": "^1.1.0",
     "@telegram-apps/sdk": "^2.9.1",
     "@twa-dev/sdk": "^7.10.1",
+    "crypto-browserify": "^3.12.1",
     "framer-motion": "^11.13.5",
     "jose": "^5.9.6",
     "lucide-react": "^0.468.0",

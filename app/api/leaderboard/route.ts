@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/utils/prisma';
 
+export const runtime = 'nodejs';
+
 export async function GET() {
   try {
     const leaderboard = await prisma.user.findMany({
