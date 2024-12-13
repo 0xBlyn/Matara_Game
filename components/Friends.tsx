@@ -62,7 +62,7 @@ export default function Friends() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen text-white -z-50">
       <TopInfoSection />
       <div className='top-20 fixed w-full'>
         <div className='flex flex-col items-center w-full pt-7'>

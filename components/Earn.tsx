@@ -82,7 +82,7 @@ export default function Earn() {
   };
 
   return (
-    <div>
+    <div className='-z-50'>
       <TopInfoSection />
       <div className="flex fixed top-20 flex-col justify-center">
       <ToastContainer />

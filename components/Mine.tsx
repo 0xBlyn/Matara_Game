@@ -79,7 +79,7 @@ export default function Mine() {
   }
 
   return (
-    <div className="min-h-screen flex justify-center">
+    <div className="min-h-screen -z-50 flex justify-center">
     <TopInfoSection />
     <div className="flex flex-col justify-center top-20 fixed">
     <div className='flex flex-col items-center w-full pt-7'>

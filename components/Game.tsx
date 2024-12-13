@@ -151,7 +151,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
             </p>
           </div>
           <div className="relative flex items-center justify-center w-full -mx-[14%] lg:mx-0">
-            <div className="fixed justify-center">
+            <div className="fixed justify-center -z-30">
               <Image
                 className={`${isMiningActive ? '' : 'grayscale'}`}
                 src={isSlashing ? hourglassBW : hourglass}
