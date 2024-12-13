@@ -5,10 +5,26 @@ const prisma = new PrismaClient();
 
 async function migrateReferralCodes() {
   try {
-    await prisma.user.updateMany({
-      where: { referralCode: { equals: null } },
-      data: { referralCode: uuidv4() }
+    // Get all users without referral codes
+    const users = await prisma.user.findMany({
+      where: {
+        OR: [
+          { referralCode: undefined },
+          { referralCode: '' }
+        ]
+      }
     });
+
+    console.log(`Found ${users.length} users without referral codes`);
+
+    // Update each user individually
+    for (const user of users) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { referralCode: uuidv4() }
+      });
+    }
+
     console.log('Successfully updated all users with unique referral codes');
   } catch (error) {
     console.error('Migration failed:', error);
