@@ -5,29 +5,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-  --main-gradient: linear-gradient(359.69deg, #000F15 57.59%, #02354C 99.76%);
-}
-
-body {
-  margin: 0;
-  padding: 0;
-}
-
-.fixed-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: var(--main-gradient);
-  z-index: 0;
-}
-
-/* Remove any existing background-black classes */
-.responsive-container {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
+  --foreground-rgb: linear-gradient(359.69deg, #000F15 57.59%, #02354C 99.76%);
+  --background-start-rgb:  linear-gradient(359.69deg, #000F15 57.59%, #02354C 99.76%);
+  --background-end-rgb:  linear-gradient(359.69deg, #000F15 57.59%, #02354C 99.76%);
 }
 
 @media (prefers-color-scheme: dark) {

@@ -1,52 +1,46 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/utils/prisma';
-import { validateTelegramWebAppData } from '@/utils/server-checks';
+import { validateInitData } from '@/utils/telegram';
+import { v4 as uuidv4 } from 'uuid';
 
-export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const telegramInitData = url.searchParams.get('initData');
-
-  if (!telegramInitData) {
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
-  }
-
-  const { validatedData, user } = validateTelegramWebAppData(telegramInitData);
-
-  if (!validatedData) {
-    return NextResponse.json({ error: 'Invalid Telegram data' }, { status: 403 });
-  }
-
-  const telegramId = user.id?.toString();
-
-  if (!telegramId) {
-    return NextResponse.json({ error: 'Invalid user data' }, { status: 400 });
-  }
-
+export async function GET(request: Request) {
   try {
-    const dbUser = await prisma.user.findUnique({
+    const { searchParams } = new URL(request.url);
+    const initData = searchParams.get('initData');
+
+    if (!initData) {
+      return NextResponse.json({ error: 'No init data provided' }, { status: 400 });
+    }
+
+    const telegramId = await validateInitData(initData);
+    
+    const user = await prisma.user.findUnique({
       where: { telegramId },
       include: {
         referrals: {
           select: {
-            id: true,
             telegramId: true,
             points: true,
-            // Add any other fields you want to include
           }
         }
       }
     });
 
-    if (!dbUser) {
+    if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    const referrals = user.referrals.map(referral => ({
+      username: `user_${referral.telegramId.slice(0, 6)}`,
+      earnings: referral.points.toFixed(2)
+    }));
+
     return NextResponse.json({
-      referrals: dbUser.referrals,
-      referralCount: dbUser.referrals.length
+      referrals,
+      referralCode: user.referralCode || uuidv4()
     });
   } catch (error) {
-    console.error('Error fetching user referrals:', error);
-    return NextResponse.json({ error: 'Failed to fetch user referrals' }, { status: 500 });
+    console.error('Error fetching referrals:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

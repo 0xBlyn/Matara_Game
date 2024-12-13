@@ -80,7 +80,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-[#001428] text-white">
       <TopSection />
       <div className="max-w-xl mx-auto px-6 pt-20">
-        <div className="flex items-center gap-6 mb-8">
+        <div className="flex items-center gap-6 mb-8 pt-6">
           <div className="relative">
             <Image
               src={profile?.photoUrl || '/placeholder.svg'}
@@ -91,7 +91,12 @@ export default function ProfilePage() {
             />
           </div>
           <div>
-            <h1 className="text-[#00ff9d] text-3xl font-bold mb-1">{profile?.displayName}</h1>
+            <h1 style={{
+                background: 'linear-gradient(92.78deg, #44F58E 12.41%, #FAFAFA 81.56%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                fontFamily:  'var(--font-gill-sans), sans-serif'
+              }} className="text-[#00ff9d] text-3xl font-bold mb-1">{profile?.displayName}</h1>
             <div className="flex items-center gap-2 text-gray-400">
               @{profile?.username}
               <Anchor className="w-4 h-4 text-[#00ff9d]" />

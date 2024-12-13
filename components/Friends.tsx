@@ -21,6 +21,7 @@ export default function Friends() {
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [isLoadingReferrals, setIsLoadingReferrals] = useState(true);
   const [showAllReferrals, setShowAllReferrals] = useState(false);
+  const [referralCode, setReferralCode] = useState<string>('');
 
   const fetchReferrals = useCallback(async () => {
     setIsLoadingReferrals(true);
@@ -31,9 +32,10 @@ export default function Friends() {
       }
       const data = await response.json();
       setReferrals(data.referrals);
+      setReferralCode(data.referralCode);
     } catch (error) {
-      console.error('Error fetching referrals:', error);
-      showErrorMessage('Failed to fetch referrals. Please try again later.');
+      console.error('Error:', error);
+      showErrorMessage('Failed to fetch referrals');
     } finally {
       setIsLoadingReferrals(false);
     }
@@ -44,14 +46,11 @@ export default function Friends() {
   }, [fetchReferrals]);
 
   const handleCopyInviteLink = useCallback(() => {
-    navigator.clipboard.writeText(`https://t.me/your_bot_username/start?startapp=kentId`)
-      .then(() => {
-        showSuccessMessage("Invite link copied to clipboard!");
-      })
-      .catch(() => {
-        showErrorMessage("Failed to copy link. Please try again.");
-      });
-  }, []);
+    const inviteLink = `https://t.me/your_bot_username/start?ref=${referralCode}`;
+    navigator.clipboard.writeText(inviteLink)
+      .then(() => showSuccessMessage("Invite link copied!"))
+      .catch(() => showErrorMessage("Failed to copy link"));
+  }, [referralCode]);
 
   const handleShareStory = useCallback(() => {
     setButtonText("Sharing...");
