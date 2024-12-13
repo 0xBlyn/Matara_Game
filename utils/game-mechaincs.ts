@@ -70,6 +70,9 @@ export interface GameState extends InitialGameState {
   setMiningActive: (active: boolean) => void;
   setMiningStartTime: (time: number) => void;
   increaseMat: (amount: number) => void;
+  startMining: () => void;
+  stopMining: () => void;
+  updateMiningRewards: () => void;
 }
 
 export const calculateLevel = (points: number): number => {
@@ -235,6 +238,46 @@ export const createGameStore = (initialState: InitialGameState) => create<GameSt
   setMiningActive: (active) => set({ isMiningActive: active }),
   setMiningStartTime: (time) => set({ miningStartTime: time }),
   increaseMat: (amount) => set((state) => ({ totalMined: state.totalMined + amount })),
+  startMining: () => set((state) => ({
+    isMiningActive: true,
+    miningStartTime: Date.now(),
+    lastClickTimestamp: Date.now()
+  })),
+
+  stopMining: () => set((state) => {
+    const miningDuration = Date.now() - state.miningStartTime;
+    const earnedPoints = calculateMinedPoints(
+      state.mineLevelIndex,
+      state.miningStartTime,
+      Date.now()
+    );
+
+    return {
+      isMiningActive: false,
+      miningStartTime: 0,
+      points: state.points + earnedPoints,
+      pointsBalance: state.pointsBalance + earnedPoints,
+      totalMined: state.totalMined + earnedPoints
+    };
+  }),
+
+  updateMiningRewards: () => set((state) => {
+    if (!state.isMiningActive) return state;
+    
+    const currentTime = Date.now();
+    const earnedPoints = calculateMinedPoints(
+      state.mineLevelIndex,
+      state.lastClickTimestamp,
+      currentTime
+    );
+
+    return {
+      points: state.points + earnedPoints,
+      pointsBalance: state.pointsBalance + earnedPoints,
+      totalMined: state.totalMined + earnedPoints,
+      lastClickTimestamp: currentTime
+    };
+  })
 }));
 
 export const useGameStore = createGameStore({

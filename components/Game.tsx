@@ -28,12 +28,14 @@ const RANKS = [
 export default function Game({ currentView, setCurrentView }: GameProps) {
   const {
     isMiningActive,
-    miningStartTime,
-    setMiningActive,
-    setMiningStartTime,
+    startMining,
+    stopMining,
+    updateMiningRewards,
     profitPerHour,
     points,
     incrementPoints,
+    miningStartTime,
+    setMiningActive
   } = useGameStore();
 
   const [timeLeft, setTimeLeft] = useState('');
@@ -61,7 +63,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
     }, 30000);
 
     return () => clearInterval(syncInterval);
-  }, [points, miningStartTime, isMiningActive]);
+  }, [points, miningStartTime, isMiningActive, incrementPoints]);
 
   useEffect(() => {
     const newRank = RANKS.reduce((acc, rank) => {
@@ -93,8 +95,16 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   }, [isMiningActive, miningStartTime, setMiningActive])
 
   const handleStartMining = useCallback(() => {
-    // ... (existing code)
-  }, [isMiningActive, setMiningActive, setMiningStartTime, playSound]);
+    if (!isMiningActive) {
+      startMining();
+    }
+  }, [isMiningActive, startMining]);
+
+  const handleStopMining = useCallback(() => {
+    if (isMiningActive) {
+      stopMining();
+    }
+  }, [isMiningActive, stopMining]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -185,11 +195,10 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
         </div>
         <div className="fixed max-h-[65vh] bottom-0 flex flex-col items-center w-full">
           <button
-            onClick={handleStartMining}
-            disabled={isMiningActive}
+            onClick={isMiningActive ? handleStopMining : handleStartMining}
             className="button lg:max-w-[200px] lg:-mt-0 relative -mb-5 w-full"
           >
-            Claim Daily Matara
+            {isMiningActive ? 'Stop Mining' : 'Claim Daily Matara'}
           </button>
           <Image
             className="min-w-[100vw] flex bottom-0 lg:max-w-[300px]"
