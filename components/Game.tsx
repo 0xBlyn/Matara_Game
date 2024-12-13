@@ -158,8 +158,8 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   }, [points])
 
   return (
-    <div className="flex flex-col items-center justify-between min-h-screen bg-[#001428] max-w-[1200px] mx-auto">
-      <div className="fixed w-full top-20 max-h-[80vh] text-white flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-between max-w-[1200px] mx-auto">
+      <div className="fixed w-full top-14 max-h-[80vh] text-white flex flex-col items-center justify-center">
         <TopInfoSection />
         <div className="flex items-center justify-center w-full h-full px-[10%] mt-16 lg:max-w-[300px]">
           <div className="text-2xl font-bold text-right mt-7">
@@ -215,10 +215,10 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
         <div className='fixed bottom-0 flex flex-col items-center'>
           <button
             onClick={handleStartMining}
-            className="button lg:max-w-[200px] lg:-mt-0 relative -top-5 px-8 py-3 rounded-full font-bold text-lg mb-4"
+            className="button lg:max-w-[200px] lg:-mt-0 relative -mb-[150px] px-8 py-3 rounded-full font-bold text-lg"
             disabled={isMiningActive && !isMiningComplete()}
           >
-            {isMiningActive ? `Mining in Progress (${timeLeft})` : 'Claim Daily Matara'}
+            Claim Daily Matara
           </button>
           <Image className='min-w-[100vw] flex bottom-0 lg:max-w-[300px]' src={lion} alt="Main Character" width={100} height={100} />
         </div>
