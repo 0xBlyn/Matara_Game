@@ -97,8 +97,8 @@ export default function Ranks() {
   return (
     <div>
       <TopSection />
-      <div className="flex items-center justify-center pt-[5vh] h-full p-4 px-[15%]">
-      <div className='fixed z-[99] flex items-center justify-between w-full px-[8%] top-60'>
+      <div className="flex items-center justify-center pt-[2vh] h-full p-4 px-[15%]">
+      <div className='fixed z-[99] flex items-center justify-between w-full px-[8%] top-48'>
       <button
           onClick={handleNext}
           className=""
@@ -167,7 +167,7 @@ export default function Ranks() {
             </motion.div>
             <h1
       className="
-        fixed bottom-16 w-full
+        fixed bottom-20 w-full
         font-['Montserrat',_sans-serif] text-[16px] font-normal text-center
         underline underline-offset-[0.35em] decoration-skip-ink-none pb-3 z-10
         bg-gradient-to-t from-[#CDCBC8] to-[#88837B] text-transparent bg-clip-text
