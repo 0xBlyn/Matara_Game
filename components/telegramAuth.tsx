@@ -66,7 +66,7 @@ export default function TelegramAuth() {
     }
 
     return (
-        <div className="flex flex-col items-center space-y-4 p-8">
+        <div className="flex flex-col items-center space-y-4">
             {isAuthenticated ? (
                 <p>Redirecting to game...</p>
             ) : (
