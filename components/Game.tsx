@@ -4,7 +4,7 @@ import { useGameStore } from '@/utils/game-mechaincs';
 import TopInfoSection from './TopInfoSection';
 import activeArrow from '@/images/active.png';
 import inactiveArrow from '@/images/inactive.png';
-import lion from '@/images/Group 113 (1).png';
+import lion from '@/images/Group 113 (2).png';
 import hourglass from '@/images/image 27 (1).png';
 import hourglassBW from '@/images/image 27.png';
 import { motion, AnimatePresence } from 'framer-motion';
