@@ -155,32 +155,25 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
 
   return (
     <div className="flex flex-col items-center justify-between min-h-screen bg-[#001428] max-w-[1200px] mx-auto">
-      <div className="flex flex-col items-center pt-20 w-full">
+      <div className="fixed w-full top-20 max-h-[80vh] text-white flex flex-col items-center justify-center">
         <TopInfoSection />
-        
-        <div className="flex items-center justify-between w-full px-4 my-6 max-w-[600px]">
-          <div className="text-right">
-            <p className={`text-xs font-semibold ${isMiningActive ? 'text-[#4BF693]' : 'text-red-500'}`}>
-              Mining Mode
-            </p>
-            <p className="font-black text-2xl">
-              <span className={isMiningActive ? 'text-[#4BF693]' : 'text-red-500'}>
-                {formatNumber(points)}
-              </span>{' '}
-              <span className="text-white font-semibold">$MAT</span>
+        <div className="flex items-center justify-center w-full h-full px-[10%] mt-16 lg:max-w-[300px]">
+          <div className="text-2xl font-bold text-right mt-7">
+            <p className='text-[#4BF693] text-xs font-semibold'>Mining Mode</p>
+            <p
+              className="font-black leading-none text-2xl text-transparent bg-clip-text"
+              style={{
+                backgroundImage: 'linear-gradient(92.78deg, #44F58E 12.41%, #FAFAFA 81.56%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text'
+              }}
+            >
+              {formatNumber(points)} <span className='text-semibold'>$</span>MAT
             </p>
           </div>
-
-          <div className="relative flex flex-col items-center justify-center">
-            <div className="relative w-[200px] h-[200px] flex items-center justify-center">
-              <Image
-                src={`/hourglass${isSlashing || !isMiningActive ? '-bw' : ''}.png`}
-                alt="Hourglass"
-                width={150}
-                height={150}
-                className="absolute"
-                priority
-              />
+          <div className="relative flex items-center justify-center w-full lg:mx-0 -mx-[8%]">
+            <div className="relative justify-center">
+              <Image className='sm:w-[120px]' src="/hourglass.png" alt="Hourglass" width={80} height={80} />
               <AnimatePresence mode="wait">
                 <motion.div
                   key={arrowDirection}
@@ -188,62 +181,42 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: arrowDirection === 'up' ? -20 : 20 }}
                   transition={{ duration: 0.3 }}
-                  className="absolute"
+                  className="absolute sm:w-[60px] top-0 mt-6 left-0 transform translate-x-1/2 translate-y-1/2 z-10"
                 >
                   <Image
                     src={`/arrow-${isMiningActive ? 'active' : 'inactive'}.png`}
                     alt="Mining Status Arrow"
-                    width={60}
-                    height={60}
+                    width={40}
+                    height={40}
                     className={`transform ${arrowDirection === 'up' ? 'rotate-180' : ''}`}
                   />
                 </motion.div>
               </AnimatePresence>
             </div>
           </div>
-
-          <div className="text-left">
-            <p className="text-[#FFBF49] text-xs font-semibold">
-              Earning Rate
-            </p>
-            <p className="font-bold text-xl text-white">
-              {formatNumber(earningsPerSecond)}{' '}
-              <span className="text-sm font-normal">$MAT/Sec</span>
-            </p>
+          <div className="text-xl mt-7">
+            <p className='text-[#FFBF49] text-xs font-semibold'>Earning Rate</p>
+            <p className='font-semibold text-2xl leading-none'>{formatNumber(earningsPerSecond)} <span className='text-lg leading-none font-base'>$MAT/Sec</span></p>
           </div>
         </div>
-
-        <div className="fixed bottom-0 flex flex-col items-center w-full max-w-[1200px]">
+        {isMiningActive ? (
+          <p className="mb-3 sm:py-1 pt-1 z-[9999] -mt-2 text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #FFD683 0%, #FFB948 100%)' }}>
+            Mining Resets in <span style={{ color: '#fff' }}>{timeLeft}</span>
+          </p>
+        ) : (
+          <p className="mb-3 sm:py-1 pt-5 z-[9999] -mt-2 text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #FFD683 0%, #FFB948 100%)' }}>
+            Start your Daily Mining
+          </p>
+        )}
+        <div className='fixed bottom-0 flex flex-col items-center'>
           <button
             onClick={handleStartMining}
+            className="button lg:max-w-[200px] lg:-mt-0 relative -top-5 px-8 py-3 rounded-full font-bold text-lg mb-4"
             disabled={isMiningActive && !isMiningComplete()}
-            className={`
-              px-8 py-3 rounded-full font-bold text-lg mb-4
-              ${isMiningActive 
-                ? 'bg-gray-500 cursor-not-allowed' 
-                : 'bg-[#FFBF49] hover:bg-[#FFB52E]'
-              } text-white transition-colors
-              max-w-[300px] w-full mx-4
-            `}
           >
             {isMiningActive ? `Mining in Progress (${timeLeft})` : 'Claim Daily Matara'}
           </button>
-          
-          <Image
-            src="/lion.png"
-            alt="Main Character"
-            width={400}
-            height={400}
-            className="w-full max-w-[600px] h-auto"
-            priority
-          />
-          
-          <nav className="flex justify-around w-full bg-[#001428] border-t border-gray-800 p-4">
-            <button className="text-gray-400 hover:text-white">Ref</button>
-            <button className="text-gray-400 hover:text-white">Rank</button>
-            <button className="text-gray-400 hover:text-white">Tasks</button>
-            <button className="text-gray-400 hover:text-white">Game</button>
-          </nav>
+          <Image className='min-w-[100vw] flex bottom-0 lg:max-w-[300px]' src="/lion.png" alt="Main Character" width={100} height={100} />
         </div>
       </div>
     </div>
