@@ -26,7 +26,7 @@ export default function TopInfoSection() {
           </div>
         </div>
         <div className="flex items-center">
-          <button className="connect-btn rounded-sm mr-2 bg-blue-500 text-white px-3 py-1 text-sm font-medium hover:bg-blue-600 transition-colors">
+          <button className="connect-btn text-black rounded-sm mr-2 px-3 py-1 text-sm font-medium transition-colors">
             Connect
           </button>
           <button onClick={() => setIsMenuOpen(true)}>

@@ -72,7 +72,7 @@ export default function Friends() {
           </div>
           <button
             onClick={handleShareStory}
-            className="relative inline-flex items-center justify-center px-5 py-3 min-w-[60%] text-black text-lg font-extrabold font-['Gill_Sans'] leading-[18px] rounded-lg before:absolute before:inset-0 before:rounded-lg before:p-[3px] before:bg-gradient-to-r before:from-[#FFD683] before:to-[#FFB948] before:-z-10 after:absolute after:inset-[3px] after:rounded-[5px] after:bg-gradient-to-r after:from-[#FFB939] after:to-[#FFD683] after:-z-10 shadow-[0px_0px_40px_0px_#FFC36940] hover:opacity-90 transition-opacity my-3"
+            className="relative inline-flex items-center font-['Gill_Sans',sans-serif] cursor-pointer justify-center px-5 py-3 min-w-[60%] text-lg font-extrabold leading-[18px] rounded-lg before:absolute before:inset-0 before:rounded-lg before:p-[3px] before:bg-gradient-to-r before:from-[#FFD683] before:to-[#FFB948] before:-z-10 after:absolute after:inset-[3px] after:rounded-[5px] after:bg-gradient-to-r after:from-[#FFB939] after:to-[#FFD683] after:-z-10 shadow-[0px_0px_40px_0px_#FFC36940] hover:opacity-90 transition-opacity my-3"
           >
             {buttonText}
           </button>
